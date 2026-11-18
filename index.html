@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isla Monedas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap">
+<style>
+:root{--bg:#f1eefb;--card:#fff;--ink:#3b3855;--mut:#8b87a6;--mint:#c9efdc;--peach:#ffdcc9;--lav:#dcd5f7;--sky:#d2e8fb;--rose:#fad4df;--sun:#fff0bd;--ok:#4fb88a;--bad:#e9809a;--s:clamp(30px,5.2vmin,60px);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1b2b;--card:#2a2740;--ink:#ece9fb;--mut:#a29fc0;--mint:#2f5046;--peach:#5a4439;--lav:#473f73;--sky:#2f4762;--rose:#5a3a48;--sun:#5c5534;--ok:#6fd1a6;--bad:#f09ab0}}
+:root[data-theme="dark"]{--bg:#1d1b2b;--card:#2a2740;--ink:#ece9fb;--mut:#a29fc0;--mint:#2f5046;--peach:#5a4439;--lav:#473f73;--sky:#2f4762;--rose:#5a3a48;--sun:#5c5534;--ok:#6fd1a6;--bad:#f09ab0}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,ui-rounded,system-ui,sans-serif;font-weight:600;display:flex;flex-direction:column}
+h1{margin:0;font-size:clamp(18px,3.4vmin,30px);text-align:center;padding-top:4px}
+[data-tip]{position:relative}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:108%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:10px;font-size:12px;width:max-content;max-width:180px;text-align:center;z-index:60;pointer-events:none;line-height:1.3}
+.top{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;padding:4px 10px}.tl,.tc,.tr{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.tc{justify-content:center}.tr{justify-content:flex-end}
+.chip{background:var(--card);border-radius:14px;padding:3px 10px;font-weight:800;font-size:clamp(14px,2.6vmin,18px);display:flex;gap:5px;align-items:center;box-shadow:0 3px 10px rgba(80,70,130,.08)}
+.chip.dim{opacity:.3}
+.btn{border:0;background:var(--card);border-radius:14px;padding:3px 10px;font-size:clamp(16px,3vmin,22px);cursor:pointer;box-shadow:0 3px 10px rgba(80,70,130,.08);color:var(--ink);font-family:inherit}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.go{background:var(--mint);transition:transform .15s}.go:hover{transform:scale(1.08)}
+.board{flex:1;min-height:0;display:grid;gap:8px;padding:0 8px 8px;grid-template-areas:"is is tr ah" "in ac pa ga" "de de de de";grid-template-columns:repeat(4,1fr);grid-template-rows:1.15fr 1.15fr .75fr}
+@media (max-width:760px){.board{grid-template-areas:"is is" "tr ah" "in ac" "pa ga" "de de";grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr)}}
+.panel{background:var(--card);border-radius:20px;padding:8px 10px;box-shadow:0 4px 16px rgba(80,70,130,.08);min-height:0;min-width:0}
+.panel h2{margin:0 0 6px;font-size:clamp(12px,2.2vmin,16px);display:inline-flex;gap:6px;background:var(--t);border-radius:12px;padding:2px 10px;cursor:help}
+.items{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.it{width:var(--s);height:var(--s);border-radius:16px;border:0;background:var(--t);font-size:calc(var(--s)*.58);cursor:pointer;position:relative;transition:transform .15s;color:var(--ink);font-family:inherit;padding:0}
+.it:hover{transform:translateY(-3px) scale(1.06)}
+.it.off{opacity:.4;cursor:not-allowed}.it.st{cursor:help}.it.sel{outline:3px solid var(--ok)}.it.done{background:var(--mint)}
+.it small{position:absolute;bottom:1px;right:5px;font-size:max(9px,calc(var(--s)*.24));font-weight:800}
+.it small.tl{top:1px;left:5px;bottom:auto;right:auto;color:var(--ok)}.it small.tl.n{color:var(--bad)}
+.it small.cnt{top:1px;right:3px;bottom:auto;left:auto;background:var(--card);border-radius:7px;padding:0 4px}
+.plot{border:2px dashed var(--mut);background:transparent;cursor:help;display:flex;align-items:center;justify-content:center}
+.island{background:linear-gradient(var(--sky),var(--mint));border-radius:16px;height:calc(100% - 4px);position:relative}
+.island>span{position:absolute;font-size:calc(var(--s)*1.15);cursor:grab;touch-action:none;user-select:none;transition:transform .2s;line-height:1}
+.island>span:hover{transform:scale(1.2)}
+.island>.l{filter:drop-shadow(0 0 5px var(--bad))}
+.island>.sun{left:3%;top:2%;cursor:default}.island>.bg{position:absolute;font-size:calc(var(--s)*1.6);opacity:.3;pointer-events:none;z-index:1;white-space:nowrap;line-height:1}.island>.rv{left:-5%;right:-5%;top:60%;height:10%;background:#6fb1e6;border-radius:50%;transform:rotate(-3deg)}
+.island>.gnd{position:absolute;left:4%;right:4%;bottom:0;height:42%;background:var(--ok);opacity:.35;border-radius:50% 50% 0 0/100% 100% 0 0}
+.jar{width:calc(var(--s)*1.1);height:calc(var(--s)*1.5);border:3px solid var(--lav);border-radius:10px 10px 22px 22px;position:relative;overflow:hidden;background:var(--bg);cursor:help}
+.jar i{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(var(--sun),#f3cf66);transition:height .4s}
+.jar b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+.bar{height:11px;border-radius:8px;background:var(--bg);overflow:hidden;flex:1;cursor:help}
+.bar b,.pg b{display:block;height:100%;border-radius:8px;transition:width .4s}
+.row{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:14px}.lb{width:62px;font-size:13px;text-align:left}.vv{font-size:13px;white-space:nowrap;min-width:84px;text-align:right}
+.w{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.pg{height:8px;border-radius:6px;background:var(--bg);width:100%;overflow:hidden;max-width:160px}.pg b{background:var(--ok)}
+.toast{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:16px;font-size:20px;font-weight:800;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.ov{position:fixed;inset:0;background:rgba(40,35,70,.45);display:none;align-items:center;justify-content:center;z-index:70;padding:12px}
+.ov.on{display:flex}
+.modal{background:var(--card);border-radius:26px;padding:18px;max-width:440px;width:100%;max-height:96vh;overflow:auto;text-align:center;position:relative}
+.modal h1{font-size:26px;padding:0 0 4px}
+.step{display:flex;gap:12px;align-items:center;text-align:left;margin:6px 0;padding:6px 12px;border-radius:16px;background:var(--t);font-size:15px}
+.step b{font-size:26px}
+.modal .go{margin-top:10px;padding:6px 22px}
+.ma{height:min(300px,42vh);background:var(--sky);border-radius:18px;position:relative;overflow:hidden;margin:8px 0;touch-action:none}
+.dg{position:absolute;font-size:40px;cursor:grab;touch-action:none;user-select:none}
+.tg{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:64px;text-align:center;line-height:1}
+.tg small{display:block;font-size:16px;font-weight:800}
+.gr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;height:100%}
+.cell{border:0;border-radius:14px;background:var(--card);font-size:34px;cursor:pointer;color:var(--ink);font-family:inherit}
+.cell small{display:block;font-size:12px}
+.bins{position:absolute;bottom:8px;left:8px;right:8px;display:flex;gap:10px}.bins .cell{flex:1;height:80px}
+.si{position:absolute;top:24px;left:0;right:0;text-align:center;font-size:76px}
+.cu{text-align:center;font-size:28px;padding:26px 0 14px}
+.fl{position:absolute;top:-30px;font-size:26px;opacity:0;animation:fall 1.6s ease-in forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(340px) rotate(300deg)}}
+.pm{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;animation:pop .5s;background:rgba(255,255,255,.25)}
+.pm b{font-size:34px}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.pk{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;justify-items:center;margin:10px 0}.pk .it{width:46px;height:46px;font-size:26px}#pk .modal{overflow:visible;max-width:540px}#hand{position:fixed;display:none;font-size:34px;z-index:65;pointer-events:none;transform:translateX(-50%);transition:left .8s ease,top .8s ease}#hand span{display:inline-block;animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(8px)}}.hint{box-shadow:0 0 0 4px var(--ok)}.pk .it small{font-size:10px}.island.mini{width:150px;height:92px;flex:none}.island.mini>span{cursor:default}.sl{display:flex;gap:12px;align-items:center;text-align:left;margin:8px 0;padding:8px;border-radius:18px;background:var(--bg)}.sl .items{margin-left:auto;flex-wrap:nowrap}.sl b{font-size:16px}.sli{flex:1;min-width:0;font-size:13px}#svn{width:100%;margin-top:10px;border:2px solid var(--lav);border-radius:14px;padding:8px 12px;font-size:18px;font-family:inherit;background:var(--bg);color:var(--ink)}@media (max-width:760px){.top{grid-template-columns:1fr 1fr}.tc{grid-column:1/-1;order:3;justify-content:center}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<h1>🏝️ Isla Monedas</h1>
+<div class="top" id="top"></div>
+<div class="board" id="app"></div>
+<div id="hand"><span>👆</span></div>
+<div class="ov" id="svm"><div class="modal"><h1>💾 Guardar partida</h1><input id="svn" maxlength="24" placeholder="Nombre de tu partida" autocomplete="off"><div class="items" style="justify-content:center;margin-top:12px"><button class="btn go" id="svy" data-tip="Guardar">✔️</button><button class="btn" id="svx" data-tip="Cancelar">✖</button></div></div></div>
+<div class="ov" id="ldm"><div class="modal"><h1>📂 Cargar partida</h1><div id="ldl"></div><button class="btn" id="ldx" data-tip="Cerrar">✖</button></div></div>
+<div class="toast" id="toast"></div>
+<div class="ov" id="cf"><div class="modal"><h1>🔄 ¿Empezar de nuevo?</h1><div style="color:var(--mut)">Se borrará todo tu progreso actual.</div><div class="items" style="justify-content:center;margin-top:12px"><button class="btn go" id="cy" data-tip="Sí, empezar de nuevo">✔️</button><button class="btn" id="cn" data-tip="No, volver">✖</button></div></div></div>
+<div class="ov" id="intro"><div class="modal">
+<h1>🏝️ ¿Cómo se juega?</h1>
+<div class="step" style="--t:var(--lav)"><b>💼</b>Trabaja con minijuegos y gana 🪙 (gasta ⚡)</div>
+<div class="step" style="--t:var(--sun)"><b>🐷</b>Ahorra: tu dinero crece solo</div>
+<div class="step" style="--t:var(--mint)"><b>🌱</b>Invierte: puede dar mucho… o nada</div>
+<div class="step" style="--t:var(--sky)"><b>🐔</b>Activos: te dan 🪙 cada día</div>
+<div class="step" style="--t:var(--rose)"><b>🐕</b>Pasivos: te dan ⭐ pero te quitan 🪙</div>
+<div class="step" style="--t:var(--peach)"><b>🧾</b>Gastos: se pagan todos los días</div>
+<div class="step" style="--t:var(--mint)"><b>🎁</b>Elige 3 deseos y cúmplelos</div>
+<div style="font-size:13px;color:var(--mut);margin-top:6px">Pasa el mouse por los iconos para ver qué hacen. Pulsa ☀️ para pasar al día siguiente.</div>
+<button class="btn go" id="play">¡Jugar!</button></div></div>
+<div class="ov" id="pk"><div class="modal"><h1>🎁 Elige 3 deseos</h1><div class="pk" id="pkg"></div><div style="font-size:20px" id="pkn">0/3</div><button class="btn go" id="pkb" disabled>✔️</button></div></div>
+<div class="ov" id="mg"><div class="modal"><button class="btn" id="mx" style="position:absolute;right:12px;top:12px" data-tip="Salir">✖</button><h1 id="mt"></h1><div id="md" style="font-size:14px;color:var(--mut)"></div><div class="ma" id="ma"></div><div style="display:flex;align-items:center;gap:8px"><div class="pg" style="max-width:none;flex:1" id="mp"></div><b id="mc">0</b></div></div></div>
+<div class="ov" id="tip"><div class="modal" id="tipc"></div></div>
+<div class="ov" id="win"><div class="modal"><h1 style="font-size:60px">🎉🏝️🎉</h1><div style="font-size:20px">¡Cumpliste tus 3 deseos!</div><div id="winstat" style="font-size:22px;margin:6px"></div><button class="btn go" id="again">🔄</button></div></div>
+<script>
+const K='islaMonedasV3',$=id=>document.getElementById(id);
+const J=[
+{i:'🍎',n:'Cosechar manzanas',d:'Arrastra las manzanas a la canasta. ¡Se venden por 🪙!',k:'drag',it:'🍎',tg:'🧺',c:8,v:1,e:1},
+{i:'🍋',n:'Limonada',d:'Sirve los vasos que pide cada cliente. ¡Cuenta bien!',k:'count',c:3,v:3,e:1},
+{i:'📦',n:'Repartir paquetes',d:'Arrastra los paquetes al camión de reparto.',k:'drag',it:'📦',tg:'🚚',c:6,v:2,e:2},
+{i:'🌿',n:'Jardinería',d:'Toca la maleza para arrancarla del jardín.',k:'tap',it:'🌿',c:7,v:2,e:2},
+{i:'🚗',n:'Lavar autos',d:'Toca las manchas de lodo para dejar el auto brillante.',k:'tap',it:'🟤',c:9,v:2,e:3},
+{i:'♻️',n:'Reciclar',d:'Manda cada cosa a su basurero: orgánico o reciclable.',k:'sort',c:8,v:2,e:3},
+{i:'🥚',n:'Recoger huevos',d:'Arrastra los huevos a la canasta sin dejar ninguno.',k:'drag',it:'🥚',tg:'🧺',c:7,v:2,e:2},
+{i:'🐟',n:'Pescar',d:'Arrastra los peces al balde.',k:'drag',it:'🐟',tg:'🪣',c:6,v:3,e:3},
+{i:'📚',n:'Ordenar libros',d:'Arrastra los libros a la estantería.',k:'drag',it:'📚',tg:'🗄️',c:6,v:2,e:2},
+{i:'🪟',n:'Limpiar ventanas',d:'Toca las burbujas de jabón para limpiar el vidrio.',k:'tap',it:'🫧',c:8,v:2,e:3},
+{i:'🖌️',n:'Pintar la cerca',d:'Toca los puntos que faltan por pintar.',k:'tap',it:'🖌️',c:8,v:2,e:3},
+{i:'🥪',n:'Sándwiches',d:'Prepara los sándwiches que pide cada cliente.',k:'count',cup:'🥪',c:3,v:4,e:2},
+{i:'🍦',n:'Heladería',d:'Sirve las bolas de helado que pide cada cliente.',k:'count',cup:'🍦',c:4,v:3,e:2},
+{i:'🥦',n:'Mercado',d:'Manda cada producto a su caja: frutas o verduras.',k:'sort',bins:[['🍓','Frutas'],['🥬','Verduras']],list:[['🍎',0],['🥦',1],['🍌',0],['🥕',1],['🍇',0],['🌽',1],['🍓',0],['🥬',1]],c:8,v:2,e:3},
+{i:'🐶',n:'Cuidar mascotas',d:'Manda cada mascota a su casita: perros o gatos.',k:'sort',bins:[['🐶','Perros'],['🐱','Gatos']],list:[['🐕',0],['🐈',1],['🐩',0],['😺',1],['🐶',0],['🐱',1],['🦮',0],['😸',1]],c:8,v:2,e:2},
+{i:'🧸',n:'Guardar juguetes',d:'Arrastra los juguetes al cajón.',k:'drag',it:'🧸',tg:'📦',c:8,v:1,e:1},
+{i:'🛒',n:'Supermercado',d:'Arrastra las latas al carrito.',k:'drag',it:'🥫',tg:'🛒',c:6,v:3,e:3},
+{i:'🔨',n:'Construcción',d:'Toca los clavos para martillarlos.',k:'tap',it:'🔩',c:9,v:2,e:3}];
+const S=[{i:'🥕',n:'Zanahoria',c:10,t:2,r:13,k:.1},{i:'🍓',n:'Fresa',c:10,t:3,r:18,k:.3},{i:'🐉',n:'Pitaya',c:10,t:4,r:40,k:.55},{i:'🌽',n:'Maíz',c:20,t:3,r:28,k:.12},{i:'🍍',n:'Piña',c:20,t:4,r:45,k:.3},{i:'🥑',n:'Aguacate',c:30,t:5,r:90,k:.45},{i:'🏦',n:'Bono del banco',c:20,t:2,r:24,k:.02},{i:'📈',n:'Acciones',c:30,t:4,r:60,k:.4},{i:'🥇',n:'Oro',c:40,t:4,r:52,k:.1},{i:'🏘️',n:'Fondo de casas',c:50,t:5,r:68,k:.12},{i:'🚀',n:'Startup',c:40,t:6,r:150,k:.75},{i:'🎨',n:'Arte',c:35,t:4,r:50,k:.2},{i:'🌲',n:'Bosque',c:25,t:5,r:38,k:.08},{i:'⚡',n:'Energía solar',c:45,t:5,r:66,k:.1},{i:'💎',n:'Diamante',c:60,t:6,r:110,k:.4},{i:'📚',n:'Curso',c:30,t:5,r:54,k:.05},{i:'🐂',n:'Ganado',c:35,t:4,r:52,k:.15},{i:'🤖',n:'Robots',c:55,t:6,r:100,k:.35}];
+const A=[{i:'🐔',n:'Gallina',c:25,d:2},{i:'🐝',n:'Abejas',c:45,d:4},{i:'🍎',n:'Árbol de manzanas',c:60,d:5},{i:'🏪',n:'Puesto de frutas',c:120,d:11},{i:'🚜',n:'Tractor',c:200,d:18},{i:'🏠',n:'Casa en alquiler',c:320,d:30},{i:'🐄',n:'Vaca',c:80,d:7},{i:'🐟',n:'Estanque de peces',c:90,d:8},{i:'🚲',n:'Alquiler de bicis',c:140,d:12},{i:'🧺',n:'Lavandería',c:160,d:14},{i:'🍕',n:'Pizzería',c:240,d:21},{i:'🎠',n:'Parque de juegos',c:280,d:25},{i:'💻',n:'App de juegos',c:350,d:32},{i:'🚌',n:'Bus turístico',c:380,d:34},{i:'🏨',n:'Hotel',c:400,d:36},{i:'🎬',n:'Cine',c:450,d:41},{i:'🏭',n:'Fábrica',c:500,d:46},{i:'⛽',n:'Gasolinera',c:600,d:56}];
+const L=[{i:'🍦',n:'Helados',c:15,d:1,s:2},{i:'🐕',n:'Perro',c:30,d:2,s:3},{i:'👟',n:'Zapatos de moda',c:40,d:2,s:3},{i:'📱',n:'Celular',c:50,d:3,s:4},{i:'🛵',n:'Scooter',c:80,d:5,s:6},{i:'🚙',n:'Carro',c:150,d:9,s:10},{i:'🍭',n:'Dulces',c:10,d:1,s:1},{i:'🧸',n:'Peluches',c:25,d:1,s:2},{i:'🍔',n:'Comida rápida',c:20,d:2,s:2},{i:'🛼',n:'Patines',c:30,d:1,s:3},{i:'🎮',n:'Videojuegos',c:35,d:2,s:3},{i:'🎧',n:'Audífonos',c:45,d:2,s:4},{i:'🦜',n:'Loro',c:60,d:4,s:5},{i:'⌚',n:'Reloj inteligente',c:70,d:3,s:5},{i:'🏍️',n:'Moto',c:120,d:8,s:9},{i:'🛥️',n:'Lancha',c:220,d:14,s:15},{i:'✈️',n:'Avioneta',c:300,d:20,s:20},{i:'🏰',n:'Mansión',c:400,d:27,s:25}];
+const WD=[['🚲','Bici',90],['🎮','Consola',160],['🏝️','Viaje',300],['🎸','Guitarra',120],['🔭','Telescopio',140],['🎢','Parque de diversiones',180],['🛹','Patineta',80],['📚','Libros',100],['🎨','Set de arte',70],['🏕️','Campamento',150],['🪁','Cometa',30],['🧩','Rompecabezas',40],['🎲','Juegos de mesa',50],['⚽','Balón profesional',55],['🧸','Oso gigante',60],['🎧','Audífonos',65],['🏀','Canasta de baloncesto',85],['🤖','Robot armable',110],['📷','Cámara',130],['🎻','Violín',135],['🏊','Piscina inflable',145],['🚁','Dron',170],['🎹','Piano',220],['🥁','Batería',190],['🌳','Casa del árbol',200],['🛶','Paseo en bote',90],['🎡','Día en la feria',95],['🐠','Acuario',115],['🪴','Jardín propio',75],['🍰','Fiesta de cumpleaños',105],['🎬','Noche de cine',45],['🏔️','Excursión al volcán',125],['🦁','Safari',260],['🚂','Tren eléctrico',150],['🎿','Viaje de esquí',280],['🌎','Vuelta al mundo',500],['🚀','Campamento espacial',350],['🏆','Torneo deportivo',100],['🎤','Karaoke',120],['🧪','Laboratorio de ciencias',160]];
+const B=[{i:'🍎',n:'Comida',d:2},{i:'💡',n:'Luz y agua',d:1},{i:'👕',n:'Ropa',d:2}];
+const T=t=>[['🐷','Ahorra al menos el 20% de tus ingresos: '+Math.ceil(t*.2)+' 🪙. ¡Págate a ti primero!'],['🌱','Deja que tu ahorro crezca primero, antes de invertir o comprar activos.'],['🐕','Los pasivos son cosas bonitas, pero pueden dejarte sin 🪙 para cumplir tus deseos.'],['🧾','Todos los días hay gastos: comer, pagar servicios y comprar lo necesario para vivir.'],['⚠️','No gastes en pasivos más del 30% de tus ingresos: '+Math.floor(t*.3)+' 🪙.'],['📉','Evita que tus gastos superen el 50% de tus ingresos: '+Math.floor(t*.5)+' 🪙.'],['🐔','Un activo te paga todos los días, aunque no trabajes. ¡Haz que trabaje por ti!'],['🎲','Invertir en varias semillas distintas reparte el riesgo.'],['🛟','Guarda un fondo para imprevistos: a veces algo se daña y hay que pagar.'],['🤔','Antes de comprar pregúntate: ¿lo necesito o solo lo quiero?'],['🗑️','Si un pasivo ya no te sirve, elimínalo para dejar de pagarlo cada día.'],['🗽','Tu gran meta: que tus activos paguen todos tus gastos.'],['🎯','Divide tus deseos en pasos: ahorra un poco cada día hasta llegar al precio.']];
+const BG=[[2,'<div class="bg" style="left:3%;bottom:4%">🌳🌲🌳🌲🌳</div>'],[4,'<div class="bg rv"></div>'],[7,'<div class="bg" style="top:2%;left:12%">⛰️🏔️⛰️🏔️</div>'],[10,'<div class="bg" style="left:5%;top:34%">🏡</div>'],[14,'<div class="bg" style="right:5%;top:36%">🏘️🏘️</div>'],[19,'<div class="bg" style="right:3%;top:6%">🏙️</div>'],[25,'<div class="bg" style="left:34%;top:0">🌆🏢🏙️</div>']];
+const z=n=>Array(n).fill(0);const fresh=()=>({v:3,coins:20,sav:0,day:1,en:3,star:0,a:z(18),l:z(18),h:z(18),p:[null,null,null],w:[0,0,0],wl:[],rm:[],di:0,ds:0,dv:0,gd:{},pos:{},r4:0,tu:[],seen:0});
+let s=load(),armed=0,tt,pk=[];
+function load(){try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.v===3)return x}catch(e){}return fresh()}
+function save(){try{localStorage.setItem(K,JSON.stringify(s))}catch(e){}}
+const inc=()=>A.reduce((t,x,i)=>t+x.d*s.a[i],0);
+const cost=()=>B.reduce((t,x)=>t+x.d,0)+L.reduce((t,x,i)=>t+x.d*s.l[i],0);
+const rmDays=i=>Math.min(7,Math.max(2,Math.round(L[i].c/22)));
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1900)}
+const it=(a,i,ic,tip,o={})=>`<button class="it${o.off?' off':''}${o.cls?' '+o.cls:''}" ${a?`data-a="${a}" data-i="${i}"`:''} data-tip="${tip}" ${o.st?`style="${o.st}"`:''}>${ic}${o.tl?`<small class="tl${o.neg?' n':''}">${o.tl}</small>`:''}${o.br?`<small>${o.br}</small>`:''}${o.cnt?`<small class="cnt">×${o.cnt}</small>`:''}</button>`;
+const P=(ar,t,tip,h,body)=>`<div class="panel" data-fit style="grid-area:${ar};--t:var(--${t})"><h2 data-tip="${tip}">${h}</h2>${body}</div>`;
+function render(){
+ const g=inc(),c=cost(),base=B.reduce((t,x)=>t+x.d,0),net=g-c,mx=Math.max(g,c,1),free=Math.min(100,Math.round(g/c*100));
+ $('top').innerHTML=`<div class="tl"><div class="chip" data-tip="Monedas">🪙 ${Math.floor(s.coins)}</div><div class="chip" data-tip="Ahorrado (+3% cada día)">🐷 ${Math.floor(s.sav)}</div><div class="chip" data-tip="Energía: se recarga cada día">${[0,1,2].map(i=>`<span class="${i<s.en?'':'dim'}">⚡</span>`).join('')}</div><div class="chip" data-tip="Felicidad">⭐ ${s.star}</div></div>`+
+ `<div class="tc"><button class="btn" data-a="save" data-tip="Guardar partida">💾</button><button class="btn" data-a="load" data-tip="Cargar partida guardada">📂</button><button class="btn" data-a="help" data-tip="Cómo se juega">❓</button><button class="btn" data-a="reset" data-tip="Empezar de nuevo">🔄</button><button class="btn" data-a="fs" data-tip="Pantalla completa">⛶</button></div><div class="tr"><button class="btn go" data-a="next" data-tip="Siguiente día (${net>=0?'+':''}${net} 🪙 sin contar tu trabajo)">☀️</button><div class="chip" data-tip="Día">📅 ${s.day}</div></div>`;
+ let own=[],k=0;
+ const put=(id,e,t,cl='')=>{const d=s.pos[id],l=d?d[0]:6+(k*61.8)%80,tp=d?d[1]:16+(k*38.2)%50;own.push(`<span class="${cl}" data-id="${id}" style="left:${l}%;top:${tp}%;z-index:${Math.round(tp)+5}" data-tip="${t}">${e}</span>`);k++};
+ S.forEach((x,i)=>{for(let q=0;q<Math.min(2,s.h[i]);q++)put('h'+i+'-'+q,x.i,x.n+': cosechada')});
+ s.p.forEach((p,j)=>p&&put('p'+j,S[p.i].i,'Creciendo: '+S[p.i].n));
+ A.forEach((x,i)=>{for(let q=0;q<Math.min(3,s.a[i]);q++)put('a'+i+'-'+q,x.i,x.n+': +'+x.d+' 🪙 al día')});
+ L.forEach((x,i)=>{for(let q=0;q<Math.min(3,s.l[i]);q++)put('l'+i+'-'+q,x.i,x.n+': -'+x.d+' 🪙 al día','l')});
+ s.wl.forEach((id,i)=>s.w[i]&&put('w'+id,WD[id][0],WD[id][1]+': ¡cumplido!'));
+ const deco=BG.filter(b=>k>=b[0]).map(b=>b[1]).join('');
+ $('app').innerHTML=
+ `<div class="panel" style="grid-area:is;--t:var(--sky)"><div class="island"><span class="sun">☀️</span><div class="gnd"></div>${deco}${own.join('')}</div></div>`+
+ P('tr','lav','Gana monedas con minijuegos. Gasta energía ⚡','💼 Trabajos',`<div class="items">${J.map((x,i)=>it('job',i,x.i,`${x.n}: hasta ${x.c*x.v} 🪙, gasta ${x.e} ⚡`,{off:s.en<x.e,tl:'+'+x.c*x.v,br:'⚡'.repeat(x.e)})).join('')}</div>`)+
+ P('ah','sun','Guarda monedas: crecen 3% cada día','🐷 Ahorros',`<div class="items"><div class="jar" data-tip="Meta de ahorro: 300 🪙"><i style="height:${Math.min(100,s.sav/3)}%"></i><b>🪙</b></div>${it('dep',0,'⬇️','Guardar 10 🪙',{off:s.coins<10,br:'10'})}${it('wd',0,'⬆️','Sacar 10 🪙',{off:s.sav<10,br:'10'})}</div>`)+
+ P('in','mint','Invierte tus monedas: más premio, más riesgo','🌱 Inversiones',`<div class="items">${S.map((x,i)=>it('seed',i,x.i,`${x.n}: ${x.c} 🪙 → ${x.r} 🪙 en ${x.t} días. Riesgo ${Math.round(x.k*100)}%`,{off:s.coins<x.c,tl:'×'+(x.r/x.c).toFixed(1),br:x.c})).join('')}</div><div class="items" style="margin-top:6px">${s.p.map(p=>`<div class="it plot" data-tip="${p?S[p.i].n+': faltan '+p.left+' días':'Parcela libre'}">${p?S[p.i].i+`<small>${p.left}📅</small>`:'➕'}</div>`).join('')}</div>`)+
+ P('ac','sky','Te dan monedas todos los días','🐔 Activos',`<div class="items">${A.map((x,i)=>it('a',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'+'+x.d,br:x.c,cnt:s.a[i]||0})).join('')}</div>`)+
+ P('pa','rose','Dan ⭐ pero te quitan monedas cada día','🐕 Pasivos',`<div class="items">${L.map((x,i)=>it('l',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${x.s} ⭐ y quita ${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'-'+x.d,neg:1,br:x.c,cnt:s.l[i]||0})).join('')}</div>`)+
+ P('ga','peach','Gastos diarios: '+c+' 🪙 = básicos '+base+' + pasivos '+(c-base)+'. Toca un pasivo para eliminarlo','🧾 Gastos <small>-'+c+'/día</small>',`<div class="items">${B.map(x=>it('',0,x.i,`${x.n}: -${x.d} 🪙 al día`,{cls:'st',tl:'-'+x.d,neg:1})).join('')}${L.map((x,i)=>{if(!s.l[i])return'';const r=s.rm.find(r=>r.i===i);return it(r?'':'rm',i,r?'🗑️':x.i,r?`Eliminando ${x.n}: faltan ${r.left} días (sigues pagando)`:`${x.n}: -${x.d*s.l[i]} 🪙 al día. Clic: eliminar (${rmDays(i)} días)`,{tl:'-'+x.d*s.l[i],neg:1,br:r?r.left+'📅':'🗑️'})}).join('')}</div>`+
+ `<div class="row" data-tip="📈 Ingresos por día: lo que generan tus activos, ${g} 🪙. Se suman cada vez que pasas de día."><span>📈</span><div class="bar"><b style="width:${g/mx*100}%;background:var(--ok)"></b></div>+${g}/día</div><div class="row" data-tip="📉 Gastos por día: ${c} 🪙 = básicos ${base} + pasivos ${c-base}. Se pagan cada vez que pasas de día."><span>📉</span><div class="bar"><b style="width:${c/mx*100}%;background:var(--bad)"></b></div>-${c}/día</div><div class="row" data-tip="🗽 Libertad: tus activos pagan el ${free}% de tus gastos diarios (${g} de ${c} 🪙). ¡Con 100% eres libre!"><span>🗽</span><div class="bar"><b style="width:${free}%;background:var(--ok)"></b></div>${free}%</div>`)+
+ P('de','mint','Cumple los 3 para ganar','🎁 Deseos',`<div class="items" style="justify-content:space-around;flex-wrap:nowrap">${s.wl.map((id,i)=>{const x=WD[id];return`<div class="w">${it('w',i,s.w[i]?'✅':x[0],`${x[1]}: ${x[2]} 🪙, da +10 ⭐`,{cls:s.w[i]?'done':'',off:!s.w[i]&&s.coins<x[2],br:x[2]})}<div class="pg"><b style="width:${s.w[i]?100:Math.min(100,s.coins/x[2]*100)}%"></b></div></div>`}).join('')}</div>`);
+}
+function mini(i){
+ const j=J[i];if(s.en<j.e)return toast('😴 ⚡0');
+ $('mt').textContent=j.i+' '+j.n;$('md').textContent=j.d;const ar=$('ma');ar.innerHTML='';$('mg').classList.add('on');
+ let n=0;const pr=()=>{$('mp').innerHTML=`<b style="width:${Math.min(100,n/j.c*100)}%"></b>`;$('mc').textContent=n+'/'+j.c};pr();
+ const fin=()=>setTimeout(()=>pay(i,Math.round(n*j.v)),400);
+ if(j.k==='drag'){
+  ar.innerHTML=`<div class="tg" id="tg">${j.tg}<small id="tn">0</small></div>`;const tg=$('tg');
+  for(let q=0;q<j.c;q++){const e=document.createElement('div');e.className='dg';e.textContent=j.it;e.style.left=(8+Math.random()*80)+'%';e.style.top=(6+Math.random()*40)+'%';
+   e.onpointerdown=ev=>{e.setPointerCapture(ev.pointerId);e.dr=1;e.style.zIndex=5};
+   e.onpointermove=ev=>{if(!e.dr)return;const r=ar.getBoundingClientRect();e.style.left=(ev.clientX-r.left-20)+'px';e.style.top=(ev.clientY-r.top-20)+'px'};
+   e.onpointerup=()=>{e.dr=0;const a=e.getBoundingClientRect(),b=tg.getBoundingClientRect();if(a.right>b.left&&a.left<b.right&&a.bottom>b.top&&a.top<b.bottom){e.remove();n++;$('tn').textContent=n;pr();if(n>=j.c)fin()}};
+   ar.appendChild(e)}
+ }else if(j.k==='tap'){
+  ar.innerHTML='<div class="gr"></div>';const g=ar.firstChild;let cur=-1;
+  for(let q=0;q<12;q++)g.insertAdjacentHTML('beforeend','<button class="cell"></button>');
+  const cs=[...g.children],nx=()=>{if(cur>=0)cs[cur].textContent='';let r;do r=Math.random()*12|0;while(r===cur);cur=r;cs[r].textContent=j.it};
+  cs.forEach((c,q)=>c.onclick=()=>{if(q!==cur)return;n++;pr();c.textContent='✨';if(n>=j.c){cur=-1;fin()}else setTimeout(nx,150)});nx();
+ }else if(j.k==='sort'){
+  const L2=(j.list||[['🍌',0],['🥫',1],['📰',1],['🍎',0],['🍾',1],['🥚',0],['📦',1],['🥬',0]]).slice().sort(()=>Math.random()-.5),bn=j.bins||[['🍂','Orgánico'],['♻️','Reciclable']];let q=0;
+  ar.innerHTML='<div class="si" id="si"></div><div class="bins">'+bn.map((b,x)=>`<button class="cell" data-b="${x}">${b[0]}<small>${b[1]}</small></button>`).join('')+'</div>';
+  const show=()=>$('si').textContent=L2[q][0];show();
+  ar.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{if(q>=L2.length)return;if(+b.dataset.b===L2[q][1])n++;else toast('❌');q++;pr();if(q>=L2.length)fin();else show()});
+ }else{
+  let need,cup=0,cu=0;
+  ar.innerHTML='<div class="cu" id="cu"></div><div class="items" style="justify-content:center"><button class="it" id="cp" style="--t:var(--sun);width:80px;height:80px">'+(j.cup||'🥤')+'<small id="ck">0</small></button><button class="it" id="sv" style="--t:var(--mint);width:80px;height:80px">🧾</button></div>';
+  const nc=()=>{need=1+Math.random()*4|0;cup=0;$('cu').textContent='🙂 💬 '+(j.cup||'🥤').repeat(need);$('ck').textContent=0};nc();
+  $('cp').onclick=()=>{cup++;$('ck').textContent=cup};
+  $('sv').onclick=()=>{if(cup===need){n++;toast('✅')}else toast('❌');cu++;pr();if(cu>=j.c)fin();else nc()};
+ }
+}
+function pay(i,amt){
+ s.en-=J[i].e;s.coins+=amt;s.di+=amt;s.gd.job=1;save();
+ let h='';for(let q=0;q<24;q++)h+=`<i class="fl" style="left:${Math.random()*94}%;animation-delay:${Math.random()*.9}s">🪙</i>`;
+ $('ma').innerHTML=h+'<div class="pm"><div>💰</div><b id="pn">+0 🪙</b></div>';
+ let v=0;const t=setInterval(()=>{v=Math.min(amt,v+Math.max(1,Math.ceil(amt/20)));$('pn').textContent='+'+v+' 🪙';if(v>=amt)clearInterval(t)},50);
+ setTimeout(()=>{$('mg').classList.remove('on');render();checkWin()},2400)}
+function endDay(){
+ const g=inc(),c=cost();let m=[],hv=0;
+ s.sav*=1.03;s.coins+=g-c;
+ if(s.coins<0){s.coins=0;s.star=Math.max(0,s.star-2);m.push('😢 -2⭐')}
+ s.p=s.p.map(p=>{if(!p)return p;p.left--;if(p.left>0)return p;const x=S[p.i];if(Math.random()>=x.k){s.coins+=x.r;hv+=x.r;s.h[p.i]++;m.push(x.i+' +'+x.r+'🪙')}else m.push('🥀 '+x.i);return null});
+ s.rm=s.rm.filter(r=>{if(--r.left>0)return true;s.l[r.i]=Math.max(0,s.l[r.i]-1);m.push('🗑️ '+L[r.i].i);return false});
+ if(Math.random()<.25){if(s.l.some(v=>v)&&Math.random()<.5){s.coins=Math.max(0,s.coins-6);m.push('🔧 -6🪙')}else{s.coins+=8;m.push('🎁 +8🪙')}}
+ const sal=s.di,ds=s.ds,dv=s.dv,t=Math.max(1,sal+g+hv);s.di=0;s.ds=0;s.dv=0;s.gd={};s.en=3;s.day++;const pc=v=>sal?Math.round(v/sal*100):0,pt=v=>sal?pc(v)+'%':'—',pe=v=>sal?'+'+pc(v)+'%':'—',rw=(ic,lb,v,p,col)=>`<div class="row"><span>${ic}</span><span class="lb">${lb}</span><div class="bar"><b style="width:${Math.min(100,Math.max(0,p))}%;background:var(--${col})"></b></div><span class="vv">${v}</span></div>`;
+ let pool=T(t).map((_,q)=>q).filter(q=>!s.tu.includes(q));if(!pool.length){s.tu=[];pool=T(t).map((_,q)=>q)}
+ const q=pool[Math.random()*pool.length|0];s.tu.push(q);const [ic,tx]=T(t)[q];
+ $('tipc').innerHTML=`<h1>📅 ${s.day}</h1>${rw('💼','Salario',sal+' 🪙 (100%)',100,'ok')}${rw('🧾','Gastos',c+' 🪙 ('+pt(c)+')',pc(c),'bad')}${rw('🐷','Ahorro',ds+' 🪙 ('+pt(ds)+')',pc(ds),'ok')}${rw('🌱','Inversión',dv+' 🪙 ('+pt(dv)+')',pc(dv),'ok')}${rw('🐔','Activos',g+' 🪙 ('+pe(g)+')',pc(g),'ok')}<div class="row" style="justify-content:center;font-weight:800;font-size:17px">📈 ${sal+g} 🪙 ${sal?'('+(100+pc(g))+'%)':''}</div><div class="step" style="--t:var(--sun);margin:8px 0"><b>${ic}</b>${tx}</div>${s.day===4&&!s.r4?(s.r4=1,'<div class="step" style="--t:var(--mint)"><b>🎯</b>Ahorra primero para luego invertir, comprar activos o comprar cosas que te hagan feliz. Cuando tengas suficientes monedas, compra tu deseo. ¡Compra los 3 deseos para ganar el juego!</div>'):''}${m.length?`<div style="font-size:20px">${m.join('  ')}</div>`:''}<button class="btn go" id="tok">☀️</button>`;
+ $('tip').classList.add('on');$('tok').onclick=()=>$('tip').classList.remove('on');
+}
+function checkWin(){if(s.wl.length===3&&s.w.every(v=>v)){$('winstat').textContent='📅 '+s.day+'   ⭐ '+s.star;$('win').classList.add('on')}}
+function picker(){pk=[];$('pkg').innerHTML=WD.map((x,i)=>`<button class="it" data-pk="${i}" data-tip="${x[1]}: ${x[2]} 🪙" style="--t:var(--mint)">${x[0]}<small>${x[2]}</small></button>`).join('');$('pkn').textContent='0/3';$('pkb').disabled=true;$('pk').classList.add('on')}
+$('pkg').onclick=e=>{const b=e.target.closest('[data-pk]');if(!b)return;const i=+b.dataset.pk,at=pk.indexOf(i);if(at>=0){pk.splice(at,1);b.classList.remove('sel')}else if(pk.length<3){pk.push(i);b.classList.add('sel')}$('pkn').textContent=pk.length+'/3';$('pkb').disabled=pk.length<3};
+$('pkb').onclick=()=>{s.wl=pk.slice();s.w=[0,0,0];$('pk').classList.remove('on');save();render()};
+function act(a,i){
+ if(a==='job')return mini(i);
+ if(a==='dep'){if(s.coins<10)return;s.coins-=10;s.sav+=10;s.ds+=10;s.gd.dep=1;toast('🐷 +10')}
+ else if(a==='wd'){if(s.sav<10)return;s.sav-=10;s.coins+=10;s.ds-=10;toast('🪙 +10')}
+ else if(a==='seed'){const x=S[i],k=s.p.findIndex(p=>!p);if(k<0)return toast('🌱 ❌');if(s.coins<x.c)return;s.coins-=x.c;s.dv+=x.c;s.gd.seed=1;s.p[k]={i,left:x.t};toast(x.i+' 🌱')}
+ else if(a==='a'){const x=A[i];if(s.coins<x.c)return;s.coins-=x.c;s.a[i]++;s.gd.a=1;toast(x.i+' +'+x.d+'🪙/📅')}
+ else if(a==='l'){const x=L[i];if(s.coins<x.c)return;s.coins-=x.c;s.l[i]++;s.star+=x.s;toast(x.i+' +'+x.s+'⭐  -'+x.d+'🪙/📅')}
+ else if(a==='rm'){s.rm.push({i,left:rmDays(i)});toast('🗑️ '+rmDays(i)+'📅')}
+ else if(a==='w'){const x=WD[s.wl[i]];if(s.w[i]||s.coins<x[2])return;s.coins-=x[2];s.w[i]=1;s.star+=10;toast(x[0]+' 🎉 +10⭐')}
+ else if(a==='next')endDay();
+ else if(a==='help'){$('intro').classList.add('on');return}
+ else if(a==='save'){$('svn').value='';$('svm').classList.add('on');setTimeout(()=>$('svn').focus(),50);return}
+ else if(a==='load'){openLoad();return}
+ else if(a==='fs'){try{(document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()).catch(()=>toast('⛶ ❌'))}catch(e){toast('⛶ ❌')}return}
+ else if(a==='reset'){$('cf').classList.add('on');return}
+ save();render();checkWin()
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.classList.contains('off'))act(b.dataset.a,+b.dataset.i)});
+$('mx').onclick=()=>$('mg').classList.remove('on');
+$('cy').onclick=()=>{$('cf').classList.remove('on');s=fresh();s.seen=1;save();render();picker()};
+$('cn').onclick=()=>$('cf').classList.remove('on');
+$('app').addEventListener('pointerdown',e=>{const el=e.target.closest('.island>span[data-id]');if(!el)return;const isl=el.parentNode;el.setPointerCapture(e.pointerId);el.style.zIndex=99;const mv=ev=>{const r=isl.getBoundingClientRect(),l=Math.max(0,Math.min(92,(ev.clientX-r.left)/r.width*100-3)),t=Math.max(0,Math.min(85,(ev.clientY-r.top)/r.height*100-6));el.style.left=l+'%';el.style.top=t+'%';el._p=[l,t]},up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);if(el._p){s.pos[el.dataset.id]=el._p;save()}};el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up)});
+function guide(){const h=$('hand'),d=s.day,g=s.gd||{};let q=null,ix=0;if(d<=3){if(!g.job){q='job';if(d===3){if(g.rj==null)g.rj=Math.random()*J.length|0;ix=g.rj}}else if(d===3)q=g.a?'next':s.coins>=A[0].c?'a':s.sav>=10?'wd':'next';else q=!g.dep?'dep':(d===2&&!g.seed)?'seed':'next'}const o=document.querySelector('.hint');if(o)o.classList.remove('hint');const el=q&&!document.querySelector('.ov.on')&&document.querySelector(q==='next'?'[data-a="next"]':`[data-a="${q}"][data-i="${ix}"]`);if(!el){h.style.display='none';return}el.classList.add('hint');const r=el.getBoundingClientRect();h.style.display='block';h.style.left=(r.left+r.width/2)+'px';h.style.top=(r.bottom-6)+'px'}
+{const _r=render;render=()=>{_r();fit();guide()}}
+function fit(){document.querySelectorAll('#app .panel[data-fit]').forEach(p=>{const ok=()=>p.lastElementChild.getBoundingClientRect().bottom<=p.getBoundingClientRect().bottom-6;let lo=24,hi=100;while(hi-lo>2){const m=(lo+hi)>>1;p.style.setProperty('--s',m+'px');if(ok())lo=m;else hi=m}p.style.setProperty('--s',lo+'px')})}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sv=()=>{try{return JSON.parse(localStorage.getItem(K+'L'))||[]}catch(e){return[]}};
+const mini2=th=>`<div class="island mini" style="--s:15px"><span class="sun">☀️</span><div class="gnd"></div>${BG.filter(b=>th.length>=b[0]).map(b=>b[1]).join('')}${th.map(t=>`<span style="left:${+t[1]||0}%;top:${+t[2]||0}%;z-index:${Math.round(+t[2]||0)+5}">${esc(t[0])}</span>`).join('')}</div>`;
+function doSave(){const nm=($('svn').value.trim()||'Mi isla').slice(0,24),th=[...document.querySelectorAll('.island>span[data-id]')].map(e=>[e.textContent,parseFloat(e.style.left)||0,parseFloat(e.style.top)||0]),sl=sv().filter(x=>x.n!==nm);sl.unshift({n:nm,t:Date.now(),d:s.day,th,s});try{localStorage.setItem(K+'L',JSON.stringify(sl.slice(0,8)));toast('💾 ✅')}catch(e){toast('💾 ❌')}$('svm').classList.remove('on')}
+function openLoad(){const a=sv();$('ldl').innerHTML=a.length?a.map((x,i)=>`<div class="sl">${mini2(x.th||[])}<div class="sli"><b>${esc(x.n)}</b><div>📅 ${x.d|0} · ${new Date(x.t).toLocaleDateString()}</div></div><div class="items"><button class="btn go" data-ld="${i}" data-tip="Cargar">▶️</button><button class="btn" data-dl="${i}" data-tip="Borrar">🗑️</button></div></div>`).join(''):'<div style="font-size:48px;margin:16px">📭</div>';$('ldm').classList.add('on')}
+$('ldl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const a=sv();if(b.dataset.ld!=null){const x=a[+b.dataset.ld];if(x&&x.s&&x.s.v===3){s=x.s;save();render();$('ldm').classList.remove('on');toast('📂 ✅')}}else if(b.dataset.dl!=null){a.splice(+b.dataset.dl,1);try{localStorage.setItem(K+'L',JSON.stringify(a))}catch(e){}openLoad()}};
+$('svy').onclick=doSave;$('svx').onclick=()=>$('svm').classList.remove('on');$('svn').onkeydown=e=>{if(e.key==='Enter')doSave()};$('ldx').onclick=()=>$('ldm').classList.remove('on');
+window.addEventListener('resize',()=>{fit();guide()});if(document.fonts)document.fonts.ready.then(()=>{fit();guide()});
+setInterval(guide,400);
+$('play').onclick=()=>{$('intro').classList.remove('on');s.seen=1;save();if(s.wl.length<3)picker()};
+$('again').onclick=()=>{$('win').classList.remove('on');s=fresh();s.seen=1;save();render();picker()};
+render();if(!s.seen)$('intro').classList.add('on');else if(s.wl.length<3)picker();
+</script></body></html>
