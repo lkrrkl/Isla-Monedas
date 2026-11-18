@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,40 +10,49 @@
 :root[data-theme="dark"]{--bg:#1d1b2b;--card:#2a2740;--ink:#ece9fb;--mut:#a29fc0;--mint:#2f5046;--peach:#5a4439;--lav:#473f73;--sky:#2f4762;--rose:#5a3a48;--sun:#5c5534;--ok:#6fd1a6;--bad:#f09ab0}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden}
-body{background:var(--bg);color:var(--ink);font-family:Nunito,ui-rounded,system-ui,sans-serif;font-weight:600;display:flex;flex-direction:column}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,ui-rounded,system-ui,sans-serif;font-weight:600;display:flex;flex-direction:column;transition:background .4s}
 h1{margin:0;font-size:clamp(18px,3.4vmin,30px);text-align:center;padding-top:4px}
-[data-tip]{position:relative}
-[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:108%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:10px;font-size:12px;width:max-content;max-width:180px;text-align:center;z-index:60;pointer-events:none;line-height:1.3}
-.top{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;padding:4px 10px}.tl,.tc,.tr{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.tc{justify-content:center}.tr{justify-content:flex-end}
+#tp{position:fixed;z-index:200;display:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:10px;font-size:12px;max-width:230px;line-height:1.3;pointer-events:none;text-align:center}
+.top{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;padding:4px 10px}
+.tl,.tc,.tr{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.tc{justify-content:center}.tr{justify-content:flex-end}
 .chip{background:var(--card);border-radius:14px;padding:3px 10px;font-weight:800;font-size:clamp(14px,2.6vmin,18px);display:flex;gap:5px;align-items:center;box-shadow:0 3px 10px rgba(80,70,130,.08)}
 .chip.dim{opacity:.3}
+.bchip{border:0;cursor:pointer;color:var(--ink);font-family:inherit}.bchip small{font-size:11px;color:var(--mut)}
 .btn{border:0;background:var(--card);border-radius:14px;padding:3px 10px;font-size:clamp(16px,3vmin,22px);cursor:pointer;box-shadow:0 3px 10px rgba(80,70,130,.08);color:var(--ink);font-family:inherit}
-.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:disabled{opacity:.4;cursor:not-allowed}.btn.sel{outline:3px solid var(--ok)}
 .go{background:var(--mint);transition:transform .15s}.go:hover{transform:scale(1.08)}
-.board{flex:1;min-height:0;display:grid;gap:8px;padding:0 8px 8px;grid-template-areas:"is is tr ah" "in ac pa ga" "de de de de";grid-template-columns:repeat(4,1fr);grid-template-rows:1.15fr 1.15fr .75fr}
-@media (max-width:760px){.board{grid-template-areas:"is is" "tr ah" "in ac" "pa ga" "de de";grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr)}}
+@media (max-width:760px){.top{grid-template-columns:1fr 1fr}.tc{grid-column:1/-1;order:3;justify-content:center}.bchip small{display:none}}
+.board{flex:1;min-height:0;display:grid;gap:8px;padding:0 8px 8px;grid-template-areas:"is is tr ah" "in ac pa ga" "de de de ga";grid-template-columns:repeat(4,1fr);grid-template-rows:1.15fr 1.15fr .75fr}
+@media (max-width:760px){.board{grid-template-areas:"is is" "tr ah" "in ac" "pa ga" "de ga";grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr)}}
 .panel{background:var(--card);border-radius:20px;padding:8px 10px;box-shadow:0 4px 16px rgba(80,70,130,.08);min-height:0;min-width:0}
-.panel h2{margin:0 0 6px;font-size:clamp(12px,2.2vmin,16px);display:inline-flex;gap:6px;background:var(--t);border-radius:12px;padding:2px 10px;cursor:help}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}
+.panel h2{margin:0;font-size:clamp(12px,2.2vmin,16px);display:inline-flex;gap:6px;background:var(--t);border-radius:12px;padding:2px 10px;cursor:help;white-space:nowrap}
+.pn{display:flex;align-items:center;gap:4px;font-size:12px}.nv{border:0;background:var(--t);border-radius:10px;cursor:pointer;padding:2px 8px;color:var(--ink);font-size:12px;font-family:inherit}
 .items{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
 .it{width:var(--s);height:var(--s);border-radius:16px;border:0;background:var(--t);font-size:calc(var(--s)*.58);cursor:pointer;position:relative;transition:transform .15s;color:var(--ink);font-family:inherit;padding:0}
 .it:hover{transform:translateY(-3px) scale(1.06)}
-.it.off{opacity:.4;cursor:not-allowed}.it.st{cursor:help}.it.sel{outline:3px solid var(--ok)}.it.done{background:var(--mint)}
+.it.off{opacity:.4;cursor:not-allowed}.it.lock{opacity:.6}.it.st{cursor:help}.it.sel{outline:3px solid var(--ok)}.it.done{background:var(--mint)}
 .it small{position:absolute;bottom:1px;right:5px;font-size:max(9px,calc(var(--s)*.24));font-weight:800}
 .it small.tl{top:1px;left:5px;bottom:auto;right:auto;color:var(--ok)}.it small.tl.n{color:var(--bad)}
 .it small.cnt{top:1px;right:3px;bottom:auto;left:auto;background:var(--card);border-radius:7px;padding:0 4px}
 .plot{border:2px dashed var(--mut);background:transparent;cursor:help;display:flex;align-items:center;justify-content:center}
-.island{background:linear-gradient(var(--sky),var(--mint));border-radius:16px;height:calc(100% - 4px);position:relative}
-.island>span{position:absolute;font-size:calc(var(--s)*1.15);cursor:grab;touch-action:none;user-select:none;transition:transform .2s;line-height:1}
-.island>span:hover{transform:scale(1.2)}
+.island{position:relative;z-index:0;border-radius:16px;overflow:hidden;height:calc(100% - 4px);background:linear-gradient(#cfe8fb,#eaf7ef);transition:background .5s}
+.island.night{background:linear-gradient(#141b3d,#2b3f6b)}
+.island svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.island>span{position:absolute;font-size:calc(var(--s)*1.15);cursor:grab;touch-action:none;user-select:none;line-height:1}
+.island>span:hover{transform:scale(1.15)}
+.island>.sun{left:3%;top:3%;cursor:default;z-index:2}
 .island>.l{filter:drop-shadow(0 0 5px var(--bad))}
-.island>.sun{left:3%;top:2%;cursor:default}.island>.bg{position:absolute;font-size:calc(var(--s)*1.6);opacity:.3;pointer-events:none;z-index:1;white-space:nowrap;line-height:1}.island>.rv{left:-5%;right:-5%;top:60%;height:10%;background:#6fb1e6;border-radius:50%;transform:rotate(-3deg)}
-.island>.gnd{position:absolute;left:4%;right:4%;bottom:0;height:42%;background:var(--ok);opacity:.35;border-radius:50% 50% 0 0/100% 100% 0 0}
+.island.mini{width:150px;height:92px;flex:none}.island.mini>span{cursor:default}
+.m{fill:#b7c3e6;opacity:.85}.sn{fill:#fff}.bd{fill:#c9c2e8;opacity:.9}.h1{fill:#bde8cd}.h2{fill:#9fd8b6}.rv{fill:#8ec5f0}.hw{fill:#f6e6c8}.rf{fill:#f0aa9c}.tk{fill:#b89c84}.tr{fill:#78c795}.st{fill:#fff;display:none}
+.night .m{fill:#2b3764}.night .sn{fill:#9aa8d6}.night .bd{fill:#3a4580}.night .h1{fill:#245044}.night .h2{fill:#1d4238}.night .rv{fill:#2f5f93}.night .hw{fill:#7d6d55}.night .rf{fill:#8a4a4f}.night .tk{fill:#5a4a3c}.night .tr{fill:#2e7b5c}.night .st{display:block}
 .jar{width:calc(var(--s)*1.1);height:calc(var(--s)*1.5);border:3px solid var(--lav);border-radius:10px 10px 22px 22px;position:relative;overflow:hidden;background:var(--bg);cursor:help}
 .jar i{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(var(--sun),#f3cf66);transition:height .4s}
 .jar b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px}
 .bar{height:11px;border-radius:8px;background:var(--bg);overflow:hidden;flex:1;cursor:help}
 .bar b,.pg b{display:block;height:100%;border-radius:8px;transition:width .4s}
-.row{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:14px}.lb{width:62px;font-size:13px;text-align:left}.vv{font-size:13px;white-space:nowrap;min-width:84px;text-align:right}
+.row{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:14px}
+.lb{width:96px;font-size:13px;text-align:left}.vv{font-size:13px;white-space:nowrap;min-width:92px;text-align:right}
 .w{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
 .pg{height:8px;border-radius:6px;background:var(--bg);width:100%;overflow:hidden;max-width:160px}.pg b{background:var(--ok)}
 .toast{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:16px;font-size:20px;font-weight:800;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap}
@@ -50,10 +60,13 @@ h1{margin:0;font-size:clamp(18px,3.4vmin,30px);text-align:center;padding-top:4px
 .ov{position:fixed;inset:0;background:rgba(40,35,70,.45);display:none;align-items:center;justify-content:center;z-index:70;padding:12px}
 .ov.on{display:flex}
 .modal{background:var(--card);border-radius:26px;padding:18px;max-width:440px;width:100%;max-height:96vh;overflow:auto;text-align:center;position:relative}
-.modal h1{font-size:26px;padding:0 0 4px}
+.modal h1{font-size:24px;padding:0 0 4px}
 .step{display:flex;gap:12px;align-items:center;text-align:left;margin:6px 0;padding:6px 12px;border-radius:16px;background:var(--t);font-size:15px}
 .step b{font-size:26px}
 .modal .go{margin-top:10px;padding:6px 22px}
+.bl{font-size:18px;margin:3px 0}.bl b{font-size:22px}
+.sad{background:var(--rose);border-radius:16px;padding:8px 12px;margin:8px 0;font-size:14px}
+.vd{border-radius:16px;padding:8px 12px;margin:8px 0;font-size:15px;font-weight:800;text-align:left}
 .ma{height:min(300px,42vh);background:var(--sky);border-radius:18px;position:relative;overflow:hidden;margin:8px 0;touch-action:none}
 .dg{position:absolute;font-size:40px;cursor:grab;touch-action:none;user-select:none}
 .tg{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:64px;text-align:center;line-height:1}
@@ -69,93 +82,138 @@ h1{margin:0;font-size:clamp(18px,3.4vmin,30px);text-align:center;padding-top:4px
 .pm{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;animation:pop .5s;background:rgba(255,255,255,.25)}
 .pm b{font-size:34px}
 @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
-.pk{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;justify-items:center;margin:10px 0}.pk .it{width:46px;height:46px;font-size:26px}#pk .modal{overflow:visible;max-width:540px}#hand{position:fixed;display:none;font-size:34px;z-index:65;pointer-events:none;transform:translateX(-50%);transition:left .8s ease,top .8s ease}#hand span{display:inline-block;animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(8px)}}.hint{box-shadow:0 0 0 4px var(--ok)}.pk .it small{font-size:10px}.island.mini{width:150px;height:92px;flex:none}.island.mini>span{cursor:default}.sl{display:flex;gap:12px;align-items:center;text-align:left;margin:8px 0;padding:8px;border-radius:18px;background:var(--bg)}.sl .items{margin-left:auto;flex-wrap:nowrap}.sl b{font-size:16px}.sli{flex:1;min-width:0;font-size:13px}#svn{width:100%;margin-top:10px;border:2px solid var(--lav);border-radius:14px;padding:8px 12px;font-size:18px;font-family:inherit;background:var(--bg);color:var(--ink)}@media (max-width:760px){.top{grid-template-columns:1fr 1fr}.tc{grid-column:1/-1;order:3;justify-content:center}}
+.pk{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;justify-items:center;margin:10px 0}.pk .it{width:42px;height:42px;font-size:24px}.pk .it small{font-size:9px}
+#pk .modal{max-width:640px}
+#hand{position:fixed;display:none;font-size:34px;z-index:65;pointer-events:none;transform:translateX(-50%);transition:left .8s ease,top .8s ease}
+#hand span{display:inline-block;animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(8px)}}
+.hint{box-shadow:0 0 0 4px var(--ok)}.lb2{flex:1;font-size:13px;text-align:left}b.vv{font-weight:800}#wa .modal{max-width:min(96vw,760px);padding:12px}.scene{width:min(88vw,720px);height:min(58vh,420px);position:relative;overflow:hidden;border-radius:22px;container-type:size;margin:0 auto 8px}.t-sky{background:linear-gradient(#8fd0ff,#e6f6ff)}.t-sea{background:linear-gradient(#9fe0ff,#2f86c8)}.t-night{background:linear-gradient(#0e1538,#3a3f86)}.t-grass{background:linear-gradient(#bfe9ff 62%,#8fd17a 62%)}.t-snow{background:linear-gradient(#cfe6ff,#f4faff)}.t-sun{background:linear-gradient(#ffd8a8,#fff0c8)}.t-stage{background:linear-gradient(#3b1f6b,#8a3fa8)}.t-space{background:linear-gradient(#050818,#2a1f5c)}.t-city{background:linear-gradient(#b8c9ee,#e8eefb)}.t-fun{background:linear-gradient(#ffd1ec,#d1e5ff)}.ac{position:absolute;left:50%;top:50%;font-size:clamp(64px,26cqmin,170px);line-height:1;margin:-.55em 0 0 -.55em;z-index:3;animation-duration:5.6s;animation-timing-function:ease-in-out;animation-fill-mode:forwards}.in{display:inline-block}.i-bob{animation:ib .5s ease-in-out infinite alternate}.i-wob{animation:iw .6s ease-in-out infinite alternate}.i-pulse{animation:ip .5s ease-in-out infinite alternate}.i-spin{animation:is 1.2s linear infinite}@keyframes ib{to{transform:translateY(-5cqh)}}@keyframes iw{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}@keyframes ip{to{transform:scale(1.18)}}@keyframes is{to{transform:rotate(360deg)}}.m-ride{animation-name:k-ride}.m-fly{animation-name:k-fly}.m-jump{animation-name:k-jump}.m-spin{animation-name:k-spin}.m-float{animation-name:k-float}.m-swim{animation-name:k-swim}.m-zoom{animation-name:k-zoom}.m-shake{animation-name:k-shake}.m-drop{animation-name:k-drop}.m-sink{animation-name:k-sink}@keyframes k-ride{0%{transform:translate(-38cqw,6cqh)}49%{transform:translate(38cqw,6cqh)}51%{transform:translate(38cqw,6cqh) scaleX(-1)}100%{transform:translate(-38cqw,6cqh) scaleX(-1)}}@keyframes k-fly{0%{transform:translate(-36cqw,12cqh) rotate(-12deg)}25%{transform:translate(-12cqw,-18cqh) rotate(6deg)}50%{transform:translate(14cqw,-4cqh) rotate(-8deg)}75%{transform:translate(34cqw,-22cqh) rotate(8deg)}100%{transform:translate(0,-6cqh)}}@keyframes k-jump{0%,100%{transform:translate(0,14cqh)}12%{transform:translate(-22cqw,-18cqh) scale(1.15)}28%{transform:translate(-22cqw,14cqh)}42%{transform:translate(0,-22cqh) scale(1.2)}58%{transform:translate(0,14cqh)}72%{transform:translate(22cqw,-18cqh) scale(1.15)}88%{transform:translate(22cqw,14cqh)}}@keyframes k-spin{0%{transform:scale(.3) rotate(0)}30%{transform:scale(1.3) rotate(540deg)}60%{transform:scale(.9) rotate(900deg)}100%{transform:scale(1.2) rotate(1440deg)}}@keyframes k-float{0%{transform:translate(-15cqw,32cqh)}25%{transform:translate(15cqw,12cqh)}50%{transform:translate(-15cqw,-6cqh)}75%{transform:translate(15cqw,-16cqh)}100%{transform:translate(0,-8cqh)}}@keyframes k-swim{0%,100%{transform:translate(-34cqw,8cqh)}25%{transform:translate(0,-8cqh)}50%{transform:translate(34cqw,8cqh) scaleX(-1)}75%{transform:translate(0,-8cqh) scaleX(-1)}}@keyframes k-zoom{0%{transform:scale(.1) rotate(-20deg)}25%{transform:scale(1.6) rotate(10deg)}45%{transform:scale(1) rotate(-6deg)}65%{transform:scale(1.5) rotate(6deg)}85%{transform:scale(1.1)}100%{transform:scale(1.35)}}@keyframes k-shake{0%,100%{transform:rotate(0) scale(1)}10%{transform:rotate(-14deg) scale(1.2)}20%{transform:rotate(14deg) scale(1)}30%{transform:rotate(-14deg) scale(1.25)}40%{transform:rotate(14deg) scale(1)}50%{transform:rotate(0) scale(1.1)}60%{transform:rotate(-14deg) scale(1.25)}70%{transform:rotate(14deg)}80%{transform:rotate(-12deg) scale(1.2)}}@keyframes k-drop{0%{transform:translate(0,-70cqh)}18%{transform:translate(0,12cqh)}28%{transform:translate(0,-12cqh)}38%{transform:translate(0,12cqh)}46%{transform:translate(0,-4cqh)}54%{transform:translate(0,12cqh)}100%{transform:translate(0,8cqh) rotate(360deg) scale(1.3)}}@keyframes k-sink{0%{transform:translate(-10cqw,-45cqh)}25%{transform:translate(14cqw,-22cqh)}50%{transform:translate(-14cqw,0)}75%{transform:translate(12cqw,14cqh)}100%{transform:translate(0,20cqh)}}.pa{position:absolute;font-style:normal;z-index:1}.pa.fall{animation:pf 3s linear infinite}.pa.rise{animation:pr 3.4s linear infinite}.pa.twk{animation:pw 1.3s ease-in-out infinite}.pa.drift{animation:pd 3.2s ease-in-out infinite alternate}@keyframes pf{from{transform:translateY(-12cqh) rotate(0)}to{transform:translateY(112cqh) rotate(360deg)}}@keyframes pr{from{transform:translateY(108cqh);opacity:0}15%{opacity:1}to{transform:translateY(-14cqh);opacity:.9}}@keyframes pw{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}@keyframes pd{from{transform:translateX(-12cqw)}to{transform:translateX(12cqw)}}.cap{position:absolute;left:50%;top:5%;transform:translateX(-50%);background:#fff;color:#3b3855;border-radius:20px;padding:6px 16px;font-size:clamp(16px,3.4vmin,26px);font-weight:800;white-space:nowrap;z-index:5;animation:ci .5s 1s backwards;box-shadow:0 4px 12px rgba(0,0,0,.2)}.cap2{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);background:rgba(0,0,0,.5);color:#fff;border-radius:16px;padding:4px 14px;font-size:clamp(14px,2.8vmin,20px);font-weight:800;white-space:nowrap;z-index:5;animation:ci .5s 2.2s backwards}@keyframes ci{from{transform:translateX(-50%) scale(0)}}
+.sl{display:flex;gap:12px;align-items:center;text-align:left;margin:8px 0;padding:8px;border-radius:18px;background:var(--bg)}.sl .items{margin-left:auto;flex-wrap:nowrap}.sl b{font-size:16px}.sli{flex:1;min-width:0;font-size:13px}
+#svn{width:100%;margin-top:10px;border:2px solid var(--lav);border-radius:14px;padding:8px 12px;font-size:18px;font-family:inherit;background:var(--bg);color:var(--ink)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style></head><body>
 <h1>🏝️ Isla Monedas</h1>
 <div class="top" id="top"></div>
 <div class="board" id="app"></div>
+<div id="tp"></div>
 <div id="hand"><span>👆</span></div>
-<div class="ov" id="svm"><div class="modal"><h1>💾 Guardar partida</h1><input id="svn" maxlength="24" placeholder="Nombre de tu partida" autocomplete="off"><div class="items" style="justify-content:center;margin-top:12px"><button class="btn go" id="svy" data-tip="Guardar">✔️</button><button class="btn" id="svx" data-tip="Cancelar">✖</button></div></div></div>
-<div class="ov" id="ldm"><div class="modal"><h1>📂 Cargar partida</h1><div id="ldl"></div><button class="btn" id="ldx" data-tip="Cerrar">✖</button></div></div>
 <div class="toast" id="toast"></div>
 <div class="ov" id="cf"><div class="modal"><h1>🔄 ¿Empezar de nuevo?</h1><div style="color:var(--mut)">Se borrará todo tu progreso actual.</div><div class="items" style="justify-content:center;margin-top:12px"><button class="btn go" id="cy" data-tip="Sí, empezar de nuevo">✔️</button><button class="btn" id="cn" data-tip="No, volver">✖</button></div></div></div>
+<div class="ov" id="svm"><div class="modal"><h1>💾 Guardar partida</h1><input id="svn" maxlength="24" placeholder="Nombre de tu partida" autocomplete="off"><div class="items" style="justify-content:center;margin-top:12px"><button class="btn go" id="svy" data-tip="Guardar">✔️</button><button class="btn" id="svx" data-tip="Cancelar">✖</button></div></div></div>
+<div class="ov" id="ldm"><div class="modal"><h1>📂 Cargar partida</h1><div id="ldl"></div><button class="btn" id="ldx" data-tip="Cerrar">✖</button></div></div>
 <div class="ov" id="intro"><div class="modal">
 <h1>🏝️ ¿Cómo se juega?</h1>
 <div class="step" style="--t:var(--lav)"><b>💼</b>Trabaja con minijuegos y gana 🪙 (gasta ⚡)</div>
 <div class="step" style="--t:var(--sun)"><b>🐷</b>Ahorra: tu dinero crece solo</div>
-<div class="step" style="--t:var(--mint)"><b>🌱</b>Invierte: puede dar mucho… o nada</div>
+<div class="step" style="--t:var(--mint)"><b>🌱</b>Invierte (hasta 5 a la vez): puede dar mucho… o nada</div>
 <div class="step" style="--t:var(--sky)"><b>🐔</b>Activos: te dan 🪙 cada día</div>
-<div class="step" style="--t:var(--rose)"><b>🐕</b>Pasivos: te dan ⭐ pero te quitan 🪙</div>
+<div class="step" style="--t:var(--rose)"><b>🐕</b>Pasivos: te dan ⭐ pero te quitan 🪙 cada día</div>
 <div class="step" style="--t:var(--peach)"><b>🧾</b>Gastos: se pagan todos los días</div>
-<div class="step" style="--t:var(--mint)"><b>🎁</b>Elige 3 deseos y cúmplelos</div>
+<div class="step" style="--t:var(--mint)"><b>🎁</b>Cada deseo pide 🪙 y ⭐. ¡Cumple todos los que elijas!</div>
 <div style="font-size:13px;color:var(--mut);margin-top:6px">Pasa el mouse por los iconos para ver qué hacen. Pulsa ☀️ para pasar al día siguiente.</div>
 <button class="btn go" id="play">¡Jugar!</button></div></div>
-<div class="ov" id="pk"><div class="modal"><h1>🎁 Elige 3 deseos</h1><div class="pk" id="pkg"></div><div style="font-size:20px" id="pkn">0/3</div><button class="btn go" id="pkb" disabled>✔️</button></div></div>
+<div class="ov" id="pk"><div class="modal"><h1>🎁 Elige tus deseos</h1><div class="items" style="justify-content:center" id="pkm"></div><div class="pk" id="pkg"></div><div style="font-size:20px" id="pkn">0/3</div><button class="btn go" id="pkb" disabled>✔️</button></div></div>
 <div class="ov" id="mg"><div class="modal"><button class="btn" id="mx" style="position:absolute;right:12px;top:12px" data-tip="Salir">✖</button><h1 id="mt"></h1><div id="md" style="font-size:14px;color:var(--mut)"></div><div class="ma" id="ma"></div><div style="display:flex;align-items:center;gap:8px"><div class="pg" style="max-width:none;flex:1" id="mp"></div><b id="mc">0</b></div></div></div>
-<div class="ov" id="tip"><div class="modal" id="tipc"></div></div>
-<div class="ov" id="win"><div class="modal"><h1 style="font-size:60px">🎉🏝️🎉</h1><div style="font-size:20px">¡Cumpliste tus 3 deseos!</div><div id="winstat" style="font-size:22px;margin:6px"></div><button class="btn go" id="again">🔄</button></div></div>
+<div class="ov" id="bal"><div class="modal" id="balc"></div></div>
+<div class="ov" id="wa"><div class="modal" id="wac"></div></div>
+<div class="ov" id="win"><div class="modal"><h1 style="font-size:60px">🎉🏝️🎉</h1><div style="font-size:20px">¡Cumpliste todos tus deseos!</div><div id="winstat" style="font-size:22px;margin:6px"></div><button class="btn go" id="again">🔄</button></div></div>
 <script>
-const K='islaMonedasV3',$=id=>document.getElementById(id);
+const K='islaMonedasV4',$=id=>document.getElementById(id);
+const SB=c=>c<=100?1:c<=200?2:c<=300?3:c<=400?4:5;
 const J=[
-{i:'🍎',n:'Cosechar manzanas',d:'Arrastra las manzanas a la canasta. ¡Se venden por 🪙!',k:'drag',it:'🍎',tg:'🧺',c:8,v:1,e:1},
-{i:'🍋',n:'Limonada',d:'Sirve los vasos que pide cada cliente. ¡Cuenta bien!',k:'count',c:3,v:3,e:1},
-{i:'📦',n:'Repartir paquetes',d:'Arrastra los paquetes al camión de reparto.',k:'drag',it:'📦',tg:'🚚',c:6,v:2,e:2},
-{i:'🌿',n:'Jardinería',d:'Toca la maleza para arrancarla del jardín.',k:'tap',it:'🌿',c:7,v:2,e:2},
-{i:'🚗',n:'Lavar autos',d:'Toca las manchas de lodo para dejar el auto brillante.',k:'tap',it:'🟤',c:9,v:2,e:3},
-{i:'♻️',n:'Reciclar',d:'Manda cada cosa a su basurero: orgánico o reciclable.',k:'sort',c:8,v:2,e:3},
-{i:'🥚',n:'Recoger huevos',d:'Arrastra los huevos a la canasta sin dejar ninguno.',k:'drag',it:'🥚',tg:'🧺',c:7,v:2,e:2},
-{i:'🐟',n:'Pescar',d:'Arrastra los peces al balde.',k:'drag',it:'🐟',tg:'🪣',c:6,v:3,e:3},
-{i:'📚',n:'Ordenar libros',d:'Arrastra los libros a la estantería.',k:'drag',it:'📚',tg:'🗄️',c:6,v:2,e:2},
-{i:'🪟',n:'Limpiar ventanas',d:'Toca las burbujas de jabón para limpiar el vidrio.',k:'tap',it:'🫧',c:8,v:2,e:3},
-{i:'🖌️',n:'Pintar la cerca',d:'Toca los puntos que faltan por pintar.',k:'tap',it:'🖌️',c:8,v:2,e:3},
-{i:'🥪',n:'Sándwiches',d:'Prepara los sándwiches que pide cada cliente.',k:'count',cup:'🥪',c:3,v:4,e:2},
-{i:'🍦',n:'Heladería',d:'Sirve las bolas de helado que pide cada cliente.',k:'count',cup:'🍦',c:4,v:3,e:2},
-{i:'🥦',n:'Mercado',d:'Manda cada producto a su caja: frutas o verduras.',k:'sort',bins:[['🍓','Frutas'],['🥬','Verduras']],list:[['🍎',0],['🥦',1],['🍌',0],['🥕',1],['🍇',0],['🌽',1],['🍓',0],['🥬',1]],c:8,v:2,e:3},
-{i:'🐶',n:'Cuidar mascotas',d:'Manda cada mascota a su casita: perros o gatos.',k:'sort',bins:[['🐶','Perros'],['🐱','Gatos']],list:[['🐕',0],['🐈',1],['🐩',0],['😺',1],['🐶',0],['🐱',1],['🦮',0],['😸',1]],c:8,v:2,e:2},
-{i:'🧸',n:'Guardar juguetes',d:'Arrastra los juguetes al cajón.',k:'drag',it:'🧸',tg:'📦',c:8,v:1,e:1},
-{i:'🛒',n:'Supermercado',d:'Arrastra las latas al carrito.',k:'drag',it:'🥫',tg:'🛒',c:6,v:3,e:3},
-{i:'🔨',n:'Construcción',d:'Toca los clavos para martillarlos.',k:'tap',it:'🔩',c:9,v:2,e:3}];
-const S=[{i:'🥕',n:'Zanahoria',c:10,t:2,r:13,k:.1},{i:'🍓',n:'Fresa',c:10,t:3,r:18,k:.3},{i:'🐉',n:'Pitaya',c:10,t:4,r:40,k:.55},{i:'🌽',n:'Maíz',c:20,t:3,r:28,k:.12},{i:'🍍',n:'Piña',c:20,t:4,r:45,k:.3},{i:'🥑',n:'Aguacate',c:30,t:5,r:90,k:.45},{i:'🏦',n:'Bono del banco',c:20,t:2,r:24,k:.02},{i:'📈',n:'Acciones',c:30,t:4,r:60,k:.4},{i:'🥇',n:'Oro',c:40,t:4,r:52,k:.1},{i:'🏘️',n:'Fondo de casas',c:50,t:5,r:68,k:.12},{i:'🚀',n:'Startup',c:40,t:6,r:150,k:.75},{i:'🎨',n:'Arte',c:35,t:4,r:50,k:.2},{i:'🌲',n:'Bosque',c:25,t:5,r:38,k:.08},{i:'⚡',n:'Energía solar',c:45,t:5,r:66,k:.1},{i:'💎',n:'Diamante',c:60,t:6,r:110,k:.4},{i:'📚',n:'Curso',c:30,t:5,r:54,k:.05},{i:'🐂',n:'Ganado',c:35,t:4,r:52,k:.15},{i:'🤖',n:'Robots',c:55,t:6,r:100,k:.35}];
-const A=[{i:'🐔',n:'Gallina',c:25,d:2},{i:'🐝',n:'Abejas',c:45,d:4},{i:'🍎',n:'Árbol de manzanas',c:60,d:5},{i:'🏪',n:'Puesto de frutas',c:120,d:11},{i:'🚜',n:'Tractor',c:200,d:18},{i:'🏠',n:'Casa en alquiler',c:320,d:30},{i:'🐄',n:'Vaca',c:80,d:7},{i:'🐟',n:'Estanque de peces',c:90,d:8},{i:'🚲',n:'Alquiler de bicis',c:140,d:12},{i:'🧺',n:'Lavandería',c:160,d:14},{i:'🍕',n:'Pizzería',c:240,d:21},{i:'🎠',n:'Parque de juegos',c:280,d:25},{i:'💻',n:'App de juegos',c:350,d:32},{i:'🚌',n:'Bus turístico',c:380,d:34},{i:'🏨',n:'Hotel',c:400,d:36},{i:'🎬',n:'Cine',c:450,d:41},{i:'🏭',n:'Fábrica',c:500,d:46},{i:'⛽',n:'Gasolinera',c:600,d:56}];
-const L=[{i:'🍦',n:'Helados',c:15,d:1,s:2},{i:'🐕',n:'Perro',c:30,d:2,s:3},{i:'👟',n:'Zapatos de moda',c:40,d:2,s:3},{i:'📱',n:'Celular',c:50,d:3,s:4},{i:'🛵',n:'Scooter',c:80,d:5,s:6},{i:'🚙',n:'Carro',c:150,d:9,s:10},{i:'🍭',n:'Dulces',c:10,d:1,s:1},{i:'🧸',n:'Peluches',c:25,d:1,s:2},{i:'🍔',n:'Comida rápida',c:20,d:2,s:2},{i:'🛼',n:'Patines',c:30,d:1,s:3},{i:'🎮',n:'Videojuegos',c:35,d:2,s:3},{i:'🎧',n:'Audífonos',c:45,d:2,s:4},{i:'🦜',n:'Loro',c:60,d:4,s:5},{i:'⌚',n:'Reloj inteligente',c:70,d:3,s:5},{i:'🏍️',n:'Moto',c:120,d:8,s:9},{i:'🛥️',n:'Lancha',c:220,d:14,s:15},{i:'✈️',n:'Avioneta',c:300,d:20,s:20},{i:'🏰',n:'Mansión',c:400,d:27,s:25}];
-const WD=[['🚲','Bici',90],['🎮','Consola',160],['🏝️','Viaje',300],['🎸','Guitarra',120],['🔭','Telescopio',140],['🎢','Parque de diversiones',180],['🛹','Patineta',80],['📚','Libros',100],['🎨','Set de arte',70],['🏕️','Campamento',150],['🪁','Cometa',30],['🧩','Rompecabezas',40],['🎲','Juegos de mesa',50],['⚽','Balón profesional',55],['🧸','Oso gigante',60],['🎧','Audífonos',65],['🏀','Canasta de baloncesto',85],['🤖','Robot armable',110],['📷','Cámara',130],['🎻','Violín',135],['🏊','Piscina inflable',145],['🚁','Dron',170],['🎹','Piano',220],['🥁','Batería',190],['🌳','Casa del árbol',200],['🛶','Paseo en bote',90],['🎡','Día en la feria',95],['🐠','Acuario',115],['🪴','Jardín propio',75],['🍰','Fiesta de cumpleaños',105],['🎬','Noche de cine',45],['🏔️','Excursión al volcán',125],['🦁','Safari',260],['🚂','Tren eléctrico',150],['🎿','Viaje de esquí',280],['🌎','Vuelta al mundo',500],['🚀','Campamento espacial',350],['🏆','Torneo deportivo',100],['🎤','Karaoke',120],['🧪','Laboratorio de ciencias',160]];
+['🍎','Cosechar manzanas','Arrastra las manzanas a la canasta. ¡Se venden por 🪙!','drag',{it:'🍎',tg:'🧺'},8,1,1],
+['🍋','Limonada','Sirve los vasos que pide cada cliente. ¡Cuenta bien!','count',{cup:'🥤'},3,3,1],
+['📦','Repartir paquetes','Arrastra los paquetes al camión.','drag',{it:'📦',tg:'🚚'},6,2,2],
+['🌿','Jardinería','Toca la maleza para arrancarla del jardín.','tap',{it:'🌿'},7,2,2],
+['🚗','Lavar autos','Toca las manchas de lodo para dejar el auto brillante.','tap',{it:'🟤'},9,2,3],
+['♻️','Reciclar','Manda cada cosa a su basurero: orgánico o reciclable.','sort',{bins:[['🍂','Orgánico'],['♻️','Reciclable']],list:[['🍌',0],['🥫',1],['📰',1],['🍎',0],['🍾',1],['🥚',0],['📦',1],['🥬',0]]},8,2,3],
+['🥚','Recoger huevos','Arrastra los huevos a la canasta.','drag',{it:'🥚',tg:'🧺'},7,2,2],
+['🐟','Pescar','Arrastra los peces al balde.','drag',{it:'🐟',tg:'🪣'},6,3,3],
+['📚','Ordenar libros','Arrastra los libros a la estantería.','drag',{it:'📚',tg:'🗄️'},6,2,2],
+['🪟','Limpiar ventanas','Toca las burbujas de jabón para limpiar el vidrio.','tap',{it:'🫧'},8,2,3],
+['🖌️','Pintar la cerca','Toca los puntos que faltan por pintar.','tap',{it:'🖌️'},8,2,3],
+['🥪','Sándwiches','Prepara los sándwiches que pide cada cliente.','count',{cup:'🥪'},3,4,2],
+['🍦','Heladería','Sirve las bolas de helado que pide cada cliente.','count',{cup:'🍦'},4,3,2],
+['🥦','Mercado','Manda cada producto a su caja: frutas o verduras.','sort',{bins:[['🍓','Frutas'],['🥬','Verduras']],list:[['🍎',0],['🥦',1],['🍌',0],['🥕',1],['🍇',0],['🌽',1],['🍓',0],['🥬',1]]},8,2,3],
+['🐶','Cuidar mascotas','Manda cada mascota a su casita: perros o gatos.','sort',{bins:[['🐶','Perros'],['🐱','Gatos']],list:[['🐕',0],['🐈',1],['🐩',0],['😺',1],['🐶',0],['🐱',1],['🦮',0],['😸',1]]},8,2,2],
+['🧸','Guardar juguetes','Arrastra los juguetes al cajón.','drag',{it:'🧸',tg:'📦'},8,1,1],
+['🛒','Supermercado','Arrastra las latas al carrito.','drag',{it:'🥫',tg:'🛒'},6,3,3],
+['🔨','Construcción','Toca los clavos para martillarlos.','tap',{it:'🔩'},9,2,3],
+['🥖','Panadería','Arrastra los panes a la canasta.','drag',{it:'🥖',tg:'🧺'},8,2,2],
+['🚕','Taxista','Toca los números en orden: 1, 2, 3…','seq',{},5,3,2],
+['📮','Cartero','Toca los buzones en orden: 1, 2, 3…','seq',{},6,3,3],
+['🍂','Barrer hojas','Toca las hojas secas para barrerlas.','tap',{it:'🍂'},9,2,3],
+['🍕','Pizzería','Prepara las porciones que pide cada cliente.','count',{cup:'🍕'},3,4,2],
+['🥛','Lechería','Arrastra las botellas al camión.','drag',{it:'🥛',tg:'🚛'},7,2,2],
+['🧵','Costurero','Toca los hilos sueltos para coserlos.','tap',{it:'🧵'},8,2,2],
+['👗','Tienda de ropa','Manda cada prenda a su estante: arriba o abajo.','sort',{bins:[['👕','Arriba'],['👖','Abajo']],list:[['👕',0],['👖',1],['🧥',0],['🩳',1],['👚',0],['🩲',1],['🥼',0],['👖',1]]},8,2,3],
+['🎪','Circo','Toca los números en orden para el gran acto.','seq',{},5,4,3],
+['🚒','Bombero','Toca las llamas para apagarlas.','tap',{it:'🔥'},9,2,3],
+['🌾','Cosechar trigo','Arrastra el trigo a la cosechadora.','drag',{it:'🌾',tg:'🚜'},8,2,2],
+['🍰','Pastelería','Sirve las porciones que pide cada cliente.','count',{cup:'🍰'},4,3,2]
+].map(r=>({i:r[0],n:r[1],d:r[2],k:r[3],...r[4],c:r[5],v:r[6],e:r[7]})).sort((a,b)=>a.c*a.v-b.c*b.v||a.e-b.e);
+const S=[['🥕','Zanahoria',10,2,13,.1],['🍓','Fresa',10,3,18,.3],['🐉','Pitaya',10,4,40,.55],['🌽','Maíz',20,3,28,.12],['🍍','Piña',20,4,45,.3],['🥑','Aguacate',30,5,90,.45],['🏦','Bono del banco',20,2,24,.02],['📈','Acciones',30,4,60,.4],['🥇','Oro',40,4,52,.1],['🏘️','Fondo de casas',50,5,68,.12],['🚀','Startup',40,6,150,.75],['🎨','Arte',35,4,50,.2],['🌲','Bosque',25,5,38,.08],['⚡','Energía solar',45,5,66,.1],['💎','Diamante',60,6,110,.4],['📚','Curso',30,5,54,.05],['🐂','Ganado',35,4,52,.15],['🤖','Robots',55,6,100,.35],['🏠','Casa para remodelar',70,6,100,.2],['🎬','Película',45,5,100,.55],['🧬','Biotecnología',80,6,170,.5],['🛰️','Satélites',90,6,150,.35],['🚗','Autos eléctricos',65,5,98,.25],['🏥','Salud',50,5,72,.12],['🌾','Granos',25,3,35,.1],['🛢️','Petróleo',60,5,95,.35],['🎮','Videojuego indie',35,5,90,.6],['☕','Café',28,4,42,.18],['🧀','Quesería',32,4,46,.1],['₿','Criptomonedas',40,4,140,.7]].map(r=>({i:r[0],n:r[1],c:r[2],t:r[3],r:r[4],k:r[5]})).sort((a,b)=>a.c-b.c);
+const A=[['🐔','Gallina',25,2],['🐝','Abejas',45,4],['🍎','Árbol de manzanas',60,5],['🏪','Puesto de frutas',120,11],['🚜','Tractor',200,18],['🏠','Casa en alquiler',320,30],['🐄','Vaca',80,7],['🐟','Estanque de peces',90,8],['🚲','Alquiler de bicis',140,12],['🧺','Lavandería',160,14],['🍕','Pizzería',240,21],['🎠','Parque de juegos',280,25],['💻','App de juegos',350,32],['🚌','Bus turístico',380,34],['🏨','Hotel',400,36],['🎬','Cine',450,41],['🏭','Fábrica',500,46],['⛽','Gasolinera',600,56],['🌻','Campo de girasoles',100,9],['🥐','Panadería propia',190,17],['🎳','Boliche',300,27],['🏋️','Gimnasio',330,30],['🏥','Clínica',520,49],['🚂','Tren turístico',550,52],['🏗️','Constructora',650,62],['🏟️','Estadio',700,67],['🛳️','Crucero',800,78],['🏦','Banco',900,90],['🛰️','Empresa de satélites',1000,100],['🏝️','Resort',1200,125]].map(r=>({i:r[0],n:r[1],c:r[2],d:r[3]})).sort((a,b)=>a.c-b.c);
+const L=[['🍦','Helados',15,1],['🐕','Perro',30,2],['👟','Zapatos de moda',40,2],['📱','Celular',50,3],['🛵','Scooter',80,5],['🚙','Carro',150,9],['🍭','Dulces',10,1],['🧸','Peluches',25,1],['🍔','Comida rápida',20,2],['🛼','Patines',30,1],['🎮','Videojuegos',35,2],['🎧','Audífonos',45,2],['🦜','Loro',60,4],['⌚','Reloj inteligente',70,3],['🏍️','Moto',120,8],['🛥️','Lancha',220,14],['✈️','Avioneta',300,20],['🏰','Mansión',400,27],['🍿','Palomitas',12,1],['🧁','Pasteles',18,1],['🎟️','Boletos de feria',28,2],['👜','Bolso de moda',55,3],['📺','Televisor grande',90,5],['🛴','Patineta eléctrica',110,6],['🐎','Caballo',180,12],['🏊','Piscina en casa',260,16],['🚤','Yate pequeño',330,22],['🎻','Instrumentos caros',140,7],['🐍','Serpiente exótica',95,6],['🏯','Castillo',480,35]].map(r=>({i:r[0],n:r[1],c:r[2],d:r[3]})).sort((a,b)=>a.c-b.c);
+const WD=[['🚲','Bici',90],['🎮','Consola',160],['🏝️','Viaje',300],['🎸','Guitarra',120],['🔭','Telescopio',140],['🎢','Parque de diversiones',180],['🛹','Patineta',80],['📚','Libros',100],['🎨','Set de arte',70],['🏕️','Campamento',150],['🪁','Cometa',30],['🧩','Rompecabezas',40],['🎲','Juegos de mesa',50],['⚽','Balón profesional',55],['🧸','Oso gigante',60],['🎧','Audífonos',65],['🏀','Canasta de baloncesto',85],['🤖','Robot armable',110],['📷','Cámara',130],['🎻','Violín',135],['🏊','Piscina inflable',145],['🚁','Dron',170],['🎹','Piano',220],['🥁','Batería',190],['🌳','Casa del árbol',200],['🛶','Paseo en bote',90],['🎡','Día en la feria',95],['🐠','Acuario',115],['🪴','Jardín propio',75],['🍰','Fiesta de cumpleaños',105],['🎬','Noche de cine',45],['🏔️','Excursión al volcán',125],['🦁','Safari',260],['🚂','Tren eléctrico',150],['🎿','Viaje de esquí',280],['🌎','Vuelta al mundo',500],['🚀','Campamento espacial',350],['🏆','Torneo deportivo',100],['🎤','Karaoke',120],['🧪','Laboratorio de ciencias',160],['🪂','Paracaídas',250],['🏄','Tabla de surf',180],['🤿','Buceo',210],['🎯','Dardos',35],['🏓','Ping pong',95],['🎳','Boliche',70],['🥋','Clases de karate',120],['🎼','Clases de música',150],['🧶','Taller de tejido',45],['🍣','Clase de cocina',85],['🚵','Bici de montaña',230],['🛷','Trineo',65],['⛺','Tienda de campaña',90],['🦖','Museo de dinosaurios',60],['🐬','Nadar con delfines',320],['🎭','Obra de teatro',55],['🌋','Viaje a Hawái',450],['🗼','Viaje a París',480],['🎪','Entradas al circo',75],['🏎️','Carrera de karts',140]].sort((a,b)=>a[2]-b[2]);
 const B=[{i:'🍎',n:'Comida',d:2},{i:'💡',n:'Luz y agua',d:1},{i:'👕',n:'Ropa',d:2}];
-const T=t=>[['🐷','Ahorra al menos el 20% de tus ingresos: '+Math.ceil(t*.2)+' 🪙. ¡Págate a ti primero!'],['🌱','Deja que tu ahorro crezca primero, antes de invertir o comprar activos.'],['🐕','Los pasivos son cosas bonitas, pero pueden dejarte sin 🪙 para cumplir tus deseos.'],['🧾','Todos los días hay gastos: comer, pagar servicios y comprar lo necesario para vivir.'],['⚠️','No gastes en pasivos más del 30% de tus ingresos: '+Math.floor(t*.3)+' 🪙.'],['📉','Evita que tus gastos superen el 50% de tus ingresos: '+Math.floor(t*.5)+' 🪙.'],['🐔','Un activo te paga todos los días, aunque no trabajes. ¡Haz que trabaje por ti!'],['🎲','Invertir en varias semillas distintas reparte el riesgo.'],['🛟','Guarda un fondo para imprevistos: a veces algo se daña y hay que pagar.'],['🤔','Antes de comprar pregúntate: ¿lo necesito o solo lo quiero?'],['🗑️','Si un pasivo ya no te sirve, elimínalo para dejar de pagarlo cada día.'],['🗽','Tu gran meta: que tus activos paguen todos tus gastos.'],['🎯','Divide tus deseos en pasos: ahorra un poco cada día hasta llegar al precio.']];
-const BG=[[2,'<div class="bg" style="left:3%;bottom:4%">🌳🌲🌳🌲🌳</div>'],[4,'<div class="bg rv"></div>'],[7,'<div class="bg" style="top:2%;left:12%">⛰️🏔️⛰️🏔️</div>'],[10,'<div class="bg" style="left:5%;top:34%">🏡</div>'],[14,'<div class="bg" style="right:5%;top:36%">🏘️🏘️</div>'],[19,'<div class="bg" style="right:3%;top:6%">🏙️</div>'],[25,'<div class="bg" style="left:34%;top:0">🌆🏢🏙️</div>']];
-const z=n=>Array(n).fill(0);const fresh=()=>({v:3,coins:20,sav:0,day:1,en:3,star:0,a:z(18),l:z(18),h:z(18),p:[null,null,null],w:[0,0,0],wl:[],rm:[],di:0,ds:0,dv:0,gd:{},pos:{},r4:0,tu:[],seen:0});
-let s=load(),armed=0,tt,pk=[];
-function load(){try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.v===3)return x}catch(e){}return fresh()}
+const T=t=>[['🐷','Ahorra al menos el 20% de tus ingresos: '+Math.ceil(t*.2)+' 🪙. ¡Págate a ti primero!'],['🌱','Deja que tu ahorro crezca primero, antes de invertir o comprar activos.'],['🐕','Los pasivos son cosas bonitas, pero pueden dejarte sin 🪙 para cumplir tus deseos.'],['🧾','Todos los días hay gastos: comer, pagar servicios y comprar lo necesario para vivir.'],['⚠️','No gastes en pasivos más del 30% de tus ingresos: '+Math.floor(t*.3)+' 🪙.'],['📉','Evita que tus gastos superen el 50% de tus ingresos: '+Math.floor(t*.5)+' 🪙.'],['🐔','Un activo te paga todos los días, aunque no trabajes. ¡Haz que trabaje por ti!'],['🎲','Invertir en varias cosas distintas reparte el riesgo.'],['🛟','Guarda un fondo para imprevistos: a veces algo se daña y hay que pagar.'],['🤔','Antes de comprar pregúntate: ¿lo necesito o solo lo quiero?'],['🗑️','Si un pasivo ya no te sirve, elimínalo para dejar de pagarlo cada día.'],['🗽','Tu gran meta: que tus activos paguen todos tus gastos.'],['🎯','Divide tus deseos en pasos: ahorra un poco cada día hasta llegar al precio.']];
+const z=n=>Array(n).fill(0);
+const fresh=()=>({v:4,coins:20,sav:0,day:1,en:3,a:z(30),l:z(30),h:z(30),p:[null,null,null,null,null],w:[],wl:[],rm:[],di:0,ds:0,dv:0,gd:{},pos:{},pg:{j:0,s:0,a:0,l:0,g:0},r4:0,tu:[],seen:0,night:null,last:null});
+let s=load(),tt,pk=[],need=3,tel=null;
+function load(){try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.v===4)return x}catch(e){}return fresh()}
 function save(){try{localStorage.setItem(K,JSON.stringify(s))}catch(e){}}
 const inc=()=>A.reduce((t,x,i)=>t+x.d*s.a[i],0);
 const cost=()=>B.reduce((t,x)=>t+x.d,0)+L.reduce((t,x,i)=>t+x.d*s.l[i],0);
+const stars=()=>L.reduce((t,x,i)=>t+s.l[i]*SB(x.c),0);
 const rmDays=i=>Math.min(7,Math.max(2,Math.round(L[i].c/22)));
+const dark=()=>s.night===null?matchMedia('(prefers-color-scheme:dark)').matches:s.night;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1900)}
-const it=(a,i,ic,tip,o={})=>`<button class="it${o.off?' off':''}${o.cls?' '+o.cls:''}" ${a?`data-a="${a}" data-i="${i}"`:''} data-tip="${tip}" ${o.st?`style="${o.st}"`:''}>${ic}${o.tl?`<small class="tl${o.neg?' n':''}">${o.tl}</small>`:''}${o.br?`<small>${o.br}</small>`:''}${o.cnt?`<small class="cnt">×${o.cnt}</small>`:''}</button>`;
-const P=(ar,t,tip,h,body)=>`<div class="panel" data-fit style="grid-area:${ar};--t:var(--${t})"><h2 data-tip="${tip}">${h}</h2>${body}</div>`;
+const bl=(n,x0,w,m,sd)=>{let o='';for(let i=0;i<n;i++){const h=m*.35+((i*sd)%(m*.65));o+=`<rect class="bd" x="${x0+i*w}" y="${150-h}" width="${w-3}" height="${h}"/>`}return o};
+const hs=(x,y,c)=>`<rect class="hw" x="${x}" y="${y}" width="${24*c}" height="${18*c}"/><path class="rf" d="M${x-3*c} ${y} L${x+12*c} ${y-14*c} L${x+27*c} ${y}Z"/>`;
+const tre=(x,y)=>`<rect class="tk" x="${x-1.5}" y="${y}" width="3" height="9"/><circle class="tr" cx="${x}" cy="${y-2}" r="9"/>`;
+function land(n,nt){
+ let o='<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice">';
+ if(nt)o+=[[40,30],[95,60],[150,22],[215,48],[265,18],[325,42],[370,72],[120,92],[300,98]].map(p=>`<circle class="st" cx="${p[0]}" cy="${p[1]}" r="1.7"/>`).join('');
+ if(n>=7)o+='<path class="m" d="M0 150 L55 85 L95 135 L145 62 L200 140 L255 88 L305 135 L355 72 L400 130 V160 H0Z"/><path class="sn" d="M145 62 L133 82 L145 78 L157 84Z M355 72 L344 90 L355 86 L366 92Z"/>';
+ if(n>=25)o+=bl(16,80,20,70,53);else if(n>=19)o+=bl(7,240,20,38,37);
+ o+='<path class="h1" d="M0 172 Q100 122 200 160 T400 150 V220 H0Z"/><path class="h2" d="M0 192 Q120 152 260 187 T400 177 V220 H0Z"/>';
+ if(n>=4)o+='<path class="rv" d="M205 156 Q185 178 228 192 T198 220 H252 Q276 198 240 184 T250 156Z"/>';
+ if(n>=10)o+=hs(48,160,1);
+ if(n>=14)o+=hs(98,168,.8)+hs(130,162,.9)+hs(318,168,.9);
+ if(n>=2)o+=[[22,188],[40,198],[362,192],[382,182],[338,204]].map(p=>tre(p[0],p[1])).join('');
+ if(n>=12)o+=[[75,200],[160,205],[290,208]].map(p=>tre(p[0],p[1])).join('');
+ return o+'</svg>'}
+const it=(a,i,ic,tip,o={})=>`<button class="it${o.off?' off':''}${o.cls?' '+o.cls:''}" ${a?`data-a="${a}" data-i="${i}"`:''} data-tip="${tip}">${ic}${o.tl?`<small class="tl${o.neg?' n':''}">${o.tl}</small>`:''}${o.br?`<small>${o.br}</small>`:''}${o.cnt?`<small class="cnt">×${o.cnt}</small>`:''}</button>`;
+const P=(ar,t,tip,h,body,nav='')=>`<div class="panel" data-fit style="grid-area:${ar};--t:var(--${t})"><div class="ph"><h2 data-tip="${tip}">${h}</h2>${nav}</div>${body}</div>`;
+const nv=(k,len,sz=10,pg=s.pg[k])=>`<span class="pn"><button class="nv" data-a="pg" data-k="${k}" data-d="-1" data-tip="Anteriores">◀</button><b>${pg+1}/${Math.ceil(len/sz)}</b><button class="nv" data-a="pg" data-k="${k}" data-d="1" data-tip="Siguientes">▶</button></span>`;
+const rg=(k,a)=>a.map((_,i)=>i).slice(s.pg[k]*10,s.pg[k]*10+10);
+const hp=id=>{let h=7;for(const c of id)h=(h*31+c.charCodeAt(0))|0;return[8+Math.abs(h%78),42+Math.abs((h>>8)%40)]};
 function render(){
- const g=inc(),c=cost(),base=B.reduce((t,x)=>t+x.d,0),net=g-c,mx=Math.max(g,c,1),free=Math.min(100,Math.round(g/c*100));
- $('top').innerHTML=`<div class="tl"><div class="chip" data-tip="Monedas">🪙 ${Math.floor(s.coins)}</div><div class="chip" data-tip="Ahorrado (+3% cada día)">🐷 ${Math.floor(s.sav)}</div><div class="chip" data-tip="Energía: se recarga cada día">${[0,1,2].map(i=>`<span class="${i<s.en?'':'dim'}">⚡</span>`).join('')}</div><div class="chip" data-tip="Felicidad">⭐ ${s.star}</div></div>`+
- `<div class="tc"><button class="btn" data-a="save" data-tip="Guardar partida">💾</button><button class="btn" data-a="load" data-tip="Cargar partida guardada">📂</button><button class="btn" data-a="help" data-tip="Cómo se juega">❓</button><button class="btn" data-a="reset" data-tip="Empezar de nuevo">🔄</button><button class="btn" data-a="fs" data-tip="Pantalla completa">⛶</button></div><div class="tr"><button class="btn go" data-a="next" data-tip="Siguiente día (${net>=0?'+':''}${net} 🪙 sin contar tu trabajo)">☀️</button><div class="chip" data-tip="Día">📅 ${s.day}</div></div>`;
+ const g=inc(),c=cost(),base=B.reduce((t,x)=>t+x.d,0),net=g-c,mx=Math.max(g,c,1),free=Math.min(100,Math.round(g/c*100)),st=stars(),nt=dark(),ol=L.map((_,i)=>i).filter(i=>s.l[i]>0),gp=Math.max(0,Math.min(Math.ceil(ol.length/5)-1,s.pg.g|0)),gl=(ic,lb,v,tip)=>`<div class="row" data-tip="${tip}"><span>${ic}</span><span class="lb2">${lb}</span><b class="vv">${v}</b></div>`,prevBal=s.last?s.last.left:20,burn=c-g,run=burn<=0?'∞':Math.floor((s.coins+s.sav)/burn);
+ $('top').innerHTML=`<div class="tl"><div class="chip" data-tip="Monedas">🪙 ${Math.floor(s.coins)}</div><div class="chip" data-tip="Ahorrado (+3% cada día)">🐷 ${Math.floor(s.sav)}</div><div class="chip" data-tip="Energía: se recarga cada día">${[0,1,2].map(i=>`<span class="${i<s.en?'':'dim'}">⚡</span>`).join('')}</div><div class="chip" data-tip="Estrellas de felicidad: te las dan tus pasivos">⭐ ${st}</div></div>`+
+ `<div class="tc"><button class="btn" data-a="save" data-tip="Guardar partida">💾</button><button class="btn" data-a="load" data-tip="Cargar partida">📂</button><button class="btn" data-a="help" data-tip="Cómo se juega">❓</button><button class="btn" data-a="reset" data-tip="Empezar de nuevo">🔄</button><button class="btn" data-a="fs" data-tip="Pantalla completa">⛶</button><button class="btn" data-a="night" data-tip="${nt?'Modo día':'Modo nocturno'}">${nt?'☀️':'🌙'}</button></div>`+
+ `<div class="tr"><button class="btn go" data-a="next" data-tip="Siguiente día (${net>=0?'+':''}${net} 🪙 sin contar tu trabajo)">⏭️</button><button class="chip bchip" data-a="bal" data-tip="Hoja de Balance: el resumen del último día">📅 ${s.day} <small>Hoja de Balance</small></button></div>`;
  let own=[],k=0;
- const put=(id,e,t,cl='')=>{const d=s.pos[id],l=d?d[0]:6+(k*61.8)%80,tp=d?d[1]:16+(k*38.2)%50;own.push(`<span class="${cl}" data-id="${id}" style="left:${l}%;top:${tp}%;z-index:${Math.round(tp)+5}" data-tip="${t}">${e}</span>`);k++};
+ const put=(id,e,t,cl='')=>{const d=s.pos[id]||hp(id);own.push(`<span class="${cl}" data-id="${id}" style="left:${d[0]}%;top:${d[1]}%;z-index:${Math.round(d[1])+5}" data-tip="${t}">${e}</span>`);k++};
  S.forEach((x,i)=>{for(let q=0;q<Math.min(2,s.h[i]);q++)put('h'+i+'-'+q,x.i,x.n+': cosechada')});
  s.p.forEach((p,j)=>p&&put('p'+j,S[p.i].i,'Creciendo: '+S[p.i].n));
  A.forEach((x,i)=>{for(let q=0;q<Math.min(3,s.a[i]);q++)put('a'+i+'-'+q,x.i,x.n+': +'+x.d+' 🪙 al día')});
  L.forEach((x,i)=>{for(let q=0;q<Math.min(3,s.l[i]);q++)put('l'+i+'-'+q,x.i,x.n+': -'+x.d+' 🪙 al día','l')});
  s.wl.forEach((id,i)=>s.w[i]&&put('w'+id,WD[id][0],WD[id][1]+': ¡cumplido!'));
- const deco=BG.filter(b=>k>=b[0]).map(b=>b[1]).join('');
  $('app').innerHTML=
- `<div class="panel" style="grid-area:is;--t:var(--sky)"><div class="island"><span class="sun">☀️</span><div class="gnd"></div>${deco}${own.join('')}</div></div>`+
- P('tr','lav','Gana monedas con minijuegos. Gasta energía ⚡','💼 Trabajos',`<div class="items">${J.map((x,i)=>it('job',i,x.i,`${x.n}: hasta ${x.c*x.v} 🪙, gasta ${x.e} ⚡`,{off:s.en<x.e,tl:'+'+x.c*x.v,br:'⚡'.repeat(x.e)})).join('')}</div>`)+
+ `<div class="panel" style="grid-area:is;--t:var(--sky)"><div class="island${nt?' night':''}">${land(k,nt)}<span class="sun" data-tip="${nt?'Es de noche':'Es de día'}">${nt?'🌙':'☀️'}</span>${own.join('')}</div></div>`+
+ P('tr','lav','Gana monedas con minijuegos. Gasta energía ⚡','💼 Trabajos',`<div class="items">${rg('j',J).map(i=>{const x=J[i];return it('job',i,x.i,`${x.n}: hasta ${x.c*x.v} 🪙, gasta ${x.e} ⚡`,{off:s.en<x.e,tl:'+'+x.c*x.v,br:'⚡'.repeat(x.e)})}).join('')}</div>`,nv('j',J.length))+
  P('ah','sun','Guarda monedas: crecen 3% cada día','🐷 Ahorros',`<div class="items"><div class="jar" data-tip="Meta de ahorro: 300 🪙"><i style="height:${Math.min(100,s.sav/3)}%"></i><b>🪙</b></div>${it('dep',0,'⬇️','Guardar 10 🪙',{off:s.coins<10,br:'10'})}${it('wd',0,'⬆️','Sacar 10 🪙',{off:s.sav<10,br:'10'})}</div>`)+
- P('in','mint','Invierte tus monedas: más premio, más riesgo','🌱 Inversiones',`<div class="items">${S.map((x,i)=>it('seed',i,x.i,`${x.n}: ${x.c} 🪙 → ${x.r} 🪙 en ${x.t} días. Riesgo ${Math.round(x.k*100)}%`,{off:s.coins<x.c,tl:'×'+(x.r/x.c).toFixed(1),br:x.c})).join('')}</div><div class="items" style="margin-top:6px">${s.p.map(p=>`<div class="it plot" data-tip="${p?S[p.i].n+': faltan '+p.left+' días':'Parcela libre'}">${p?S[p.i].i+`<small>${p.left}📅</small>`:'➕'}</div>`).join('')}</div>`)+
- P('ac','sky','Te dan monedas todos los días','🐔 Activos',`<div class="items">${A.map((x,i)=>it('a',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'+'+x.d,br:x.c,cnt:s.a[i]||0})).join('')}</div>`)+
- P('pa','rose','Dan ⭐ pero te quitan monedas cada día','🐕 Pasivos',`<div class="items">${L.map((x,i)=>it('l',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${x.s} ⭐ y quita ${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'-'+x.d,neg:1,br:x.c,cnt:s.l[i]||0})).join('')}</div>`)+
- P('ga','peach','Gastos diarios: '+c+' 🪙 = básicos '+base+' + pasivos '+(c-base)+'. Toca un pasivo para eliminarlo','🧾 Gastos <small>-'+c+'/día</small>',`<div class="items">${B.map(x=>it('',0,x.i,`${x.n}: -${x.d} 🪙 al día`,{cls:'st',tl:'-'+x.d,neg:1})).join('')}${L.map((x,i)=>{if(!s.l[i])return'';const r=s.rm.find(r=>r.i===i);return it(r?'':'rm',i,r?'🗑️':x.i,r?`Eliminando ${x.n}: faltan ${r.left} días (sigues pagando)`:`${x.n}: -${x.d*s.l[i]} 🪙 al día. Clic: eliminar (${rmDays(i)} días)`,{tl:'-'+x.d*s.l[i],neg:1,br:r?r.left+'📅':'🗑️'})}).join('')}</div>`+
- `<div class="row" data-tip="📈 Ingresos por día: lo que generan tus activos, ${g} 🪙. Se suman cada vez que pasas de día."><span>📈</span><div class="bar"><b style="width:${g/mx*100}%;background:var(--ok)"></b></div>+${g}/día</div><div class="row" data-tip="📉 Gastos por día: ${c} 🪙 = básicos ${base} + pasivos ${c-base}. Se pagan cada vez que pasas de día."><span>📉</span><div class="bar"><b style="width:${c/mx*100}%;background:var(--bad)"></b></div>-${c}/día</div><div class="row" data-tip="🗽 Libertad: tus activos pagan el ${free}% de tus gastos diarios (${g} de ${c} 🪙). ¡Con 100% eres libre!"><span>🗽</span><div class="bar"><b style="width:${free}%;background:var(--ok)"></b></div>${free}%</div>`)+
- P('de','mint','Cumple los 3 para ganar','🎁 Deseos',`<div class="items" style="justify-content:space-around;flex-wrap:nowrap">${s.wl.map((id,i)=>{const x=WD[id];return`<div class="w">${it('w',i,s.w[i]?'✅':x[0],`${x[1]}: ${x[2]} 🪙, da +10 ⭐`,{cls:s.w[i]?'done':'',off:!s.w[i]&&s.coins<x[2],br:x[2]})}<div class="pg"><b style="width:${s.w[i]?100:Math.min(100,s.coins/x[2]*100)}%"></b></div></div>`}).join('')}</div>`);
+ P('in','mint','Invierte tus monedas (hasta 5 a la vez): más premio, más riesgo','🌱 Inversiones',`<div class="items">${rg('s',S).map(i=>{const x=S[i];return it('seed',i,x.i,`${x.n}: ${x.c} 🪙 → ${x.r} 🪙 en ${x.t} días. Riesgo ${Math.round(x.k*100)}%`,{off:s.coins<x.c,tl:'×'+(x.r/x.c).toFixed(1),br:x.c})}).join('')}</div><div class="items" style="margin-top:6px">${s.p.map(p=>`<div class="it plot" data-tip="${p?S[p.i].n+': faltan '+p.left+' días':'Espacio libre para invertir'}">${p?S[p.i].i+`<small>${p.left}📅</small>`:'➕'}</div>`).join('')}</div>`,nv('s',S.length))+
+ P('ac','sky','Te dan monedas todos los días','🐔 Activos',`<div class="items">${rg('a',A).map(i=>{const x=A[i];return it('a',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'+'+x.d,br:x.c,cnt:s.a[i]||0})}).join('')}</div>`,nv('a',A.length))+
+ P('pa','rose','Dan ⭐ pero te quitan monedas cada día','🐕 Pasivos',`<div class="items">${rg('l',L).map(i=>{const x=L[i];return it('l',i,x.i,`${x.n}: cuesta ${x.c} 🪙, da +${SB(x.c)} ⭐ y quita ${x.d} 🪙 al día`,{off:s.coins<x.c,tl:'-'+x.d,neg:1,br:x.c,cnt:s.l[i]||0})}).join('')}</div>`,nv('l',L.length))+
+ P('ga','peach','Gastos diarios: '+c+' 🪙 = básicos '+base+' + pasivos '+(c-base)+'. Toca un pasivo para eliminarlo','🧾 Gastos <small>-'+c+'/día</small>',`<div class="items">${B.map(x=>it('',0,x.i,`${x.n}: -${x.d} 🪙 al día`,{cls:'st',tl:'-'+x.d,neg:1})).join('')}${ol.slice(gp*5,gp*5+5).map(i=>{const x=L[i],r=s.rm.find(r=>r.i===i);return it(r?'':'rm',i,r?'🗑️':x.i,r?`Eliminando ${x.n}: faltan ${r.left} días (sigues pagando)`:`${x.n}: -${x.d*s.l[i]} 🪙 al día. Clic: eliminar (${rmDays(i)} días)`,{tl:'-'+x.d*s.l[i],neg:1,br:r?r.left+'📅':'🗑️'})}).join('')}</div>`+
+ `${gl('📅','Saldo del día anterior',prevBal+' 🪙','Las monedas con las que terminaste el día anterior.')}${gl('🌱','Inversión ganada del día',(s.last?s.last.hv:0)+' 🪙','Lo que ganaron tus inversiones el día anterior, cuando las cosechaste.')}${gl('🐔','Activos',g+' 🪙 ganadas','Lo que te dan tus activos cada día: '+g+' 🪙. Se suman al pasar de día.')}${gl('🧾','Gastos por día','-'+c+' 🪙','Gastos por día: '+c+' 🪙 = básicos '+base+' + pasivos '+(c-base)+'. Se pagan al pasar de día.')}<div class="row" data-tip="🗽 Libertad: tus activos pagan el ${free}% de tus gastos diarios (${g} de ${c} 🪙). ¡Con 100% eres libre!"><span>🗽</span><div class="bar"><b style="width:${free}%;background:var(--ok)"></b></div>${free}%</div>${gl('⏳','Dinero alcanza para',run+' días','Con tus monedas y ahorros pagas tus gastos (menos lo que ganan tus activos) durante '+run+' días. Si es ∞, tus activos ya pagan todo.')}`,ol.length>5?nv('g',ol.length,5,gp):'')+
+ P('de','mint','Cada deseo pide monedas y estrellas ⭐ (las dan los pasivos)','🎁 Deseos',`<div class="items" style="justify-content:space-around;flex-wrap:nowrap">${s.wl.map((id,i)=>{const x=WD[id],r=SB(x[2]);return`<div class="w">${it('w',i,s.w[i]?'✅':x[0],`${x[1]}: ${x[2]} 🪙 y ${r} ⭐ (tienes ${st})`,{cls:s.w[i]?'done':st<r?'lock':'',off:!s.w[i]&&s.coins<x[2],br:x[2],tl:r+'⭐'})}<div class="pg"><b style="width:${s.w[i]?100:Math.min(100,s.coins/x[2]*100)}%"></b></div></div>`}).join('')}</div>`);
 }
+function fit(){document.querySelectorAll('#app .panel[data-fit]').forEach(p=>{const ok=()=>p.lastElementChild.getBoundingClientRect().bottom<=p.getBoundingClientRect().bottom-6;let lo=24,hi=100;while(hi-lo>2){const m=(lo+hi)>>1;p.style.setProperty('--s',m+'px');if(ok())lo=m;else hi=m}p.style.setProperty('--s',lo+'px')})}
+function guide(){const h=$('hand'),d=s.day,g=s.gd||{};let q=null,ix=0;if(d<=3){if(!g.job){q='job';if(d===3){if(g.rj==null)g.rj=Math.random()*10|0;ix=g.rj}}else if(d===3)q=g.a?'next':s.coins>=A[0].c?'a':s.sav>=10?'wd':'next';else q=!g.dep?'dep':(d===2&&!g.seed)?'seed':'next'}const o=document.querySelector('.hint');if(o)o.classList.remove('hint');const el=q&&!document.querySelector('.ov.on')&&document.querySelector(q==='next'?'[data-a="next"]':`[data-a="${q}"][data-i="${ix}"]`);if(!el){h.style.display='none';return}el.classList.add('hint');const r=el.getBoundingClientRect();h.style.display='block';h.style.left=(r.left+r.width/2)+'px';h.style.top=(r.bottom-6)+'px'}
 function mini(i){
  const j=J[i];if(s.en<j.e)return toast('😴 ⚡0');
  $('mt').textContent=j.i+' '+j.n;$('md').textContent=j.d;const ar=$('ma');ar.innerHTML='';$('mg').classList.add('on');
@@ -173,17 +231,23 @@ function mini(i){
   for(let q=0;q<12;q++)g.insertAdjacentHTML('beforeend','<button class="cell"></button>');
   const cs=[...g.children],nx=()=>{if(cur>=0)cs[cur].textContent='';let r;do r=Math.random()*12|0;while(r===cur);cur=r;cs[r].textContent=j.it};
   cs.forEach((c,q)=>c.onclick=()=>{if(q!==cur)return;n++;pr();c.textContent='✨';if(n>=j.c){cur=-1;fin()}else setTimeout(nx,150)});nx();
+ }else if(j.k==='seq'){
+  ar.innerHTML='<div class="gr"></div>';const g=ar.firstChild;let nx=1;
+  const pos=[...Array(12).keys()].sort(()=>Math.random()-.5).slice(0,j.c);
+  for(let q=0;q<12;q++)g.insertAdjacentHTML('beforeend','<button class="cell"></button>');
+  const cs=[...g.children];pos.forEach((p,q)=>cs[p].textContent=q+1);
+  cs.forEach((c,q)=>c.onclick=()=>{const w=pos.indexOf(q);if(w<0||c.textContent==='✅')return;if(w+1===nx){c.textContent='✅';nx++;n++;pr();if(n>=j.c)fin()}else toast('❌ '+nx)});
  }else if(j.k==='sort'){
-  const L2=(j.list||[['🍌',0],['🥫',1],['📰',1],['🍎',0],['🍾',1],['🥚',0],['📦',1],['🥬',0]]).slice().sort(()=>Math.random()-.5),bn=j.bins||[['🍂','Orgánico'],['♻️','Reciclable']];let q=0;
-  ar.innerHTML='<div class="si" id="si"></div><div class="bins">'+bn.map((b,x)=>`<button class="cell" data-b="${x}">${b[0]}<small>${b[1]}</small></button>`).join('')+'</div>';
+  const L2=j.list.slice().sort(()=>Math.random()-.5);let q=0;
+  ar.innerHTML='<div class="si" id="si"></div><div class="bins">'+j.bins.map((b,x)=>`<button class="cell" data-b="${x}">${b[0]}<small>${b[1]}</small></button>`).join('')+'</div>';
   const show=()=>$('si').textContent=L2[q][0];show();
   ar.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{if(q>=L2.length)return;if(+b.dataset.b===L2[q][1])n++;else toast('❌');q++;pr();if(q>=L2.length)fin();else show()});
  }else{
-  let need,cup=0,cu=0;
-  ar.innerHTML='<div class="cu" id="cu"></div><div class="items" style="justify-content:center"><button class="it" id="cp" style="--t:var(--sun);width:80px;height:80px">'+(j.cup||'🥤')+'<small id="ck">0</small></button><button class="it" id="sv" style="--t:var(--mint);width:80px;height:80px">🧾</button></div>';
-  const nc=()=>{need=1+Math.random()*4|0;cup=0;$('cu').textContent='🙂 💬 '+(j.cup||'🥤').repeat(need);$('ck').textContent=0};nc();
+  let need2,cup=0,cu=0;
+  ar.innerHTML='<div class="cu" id="cu"></div><div class="items" style="justify-content:center"><button class="it" id="cp" style="--t:var(--sun);width:80px;height:80px">'+j.cup+'<small id="ck">0</small></button><button class="it" id="sv" style="--t:var(--mint);width:80px;height:80px">🧾</button></div>';
+  const nc=()=>{need2=1+Math.random()*4|0;cup=0;$('cu').textContent='🙂 💬 '+j.cup.repeat(need2);$('ck').textContent=0};nc();
   $('cp').onclick=()=>{cup++;$('ck').textContent=cup};
-  $('sv').onclick=()=>{if(cup===need){n++;toast('✅')}else toast('❌');cu++;pr();if(cu>=j.c)fin();else nc()};
+  $('sv').onclick=()=>{if(cup===need2){n++;toast('✅')}else toast('❌');cu++;pr();if(cu>=j.c)fin();else nc()};
  }
 }
 function pay(i,amt){
@@ -193,57 +257,88 @@ function pay(i,amt){
  let v=0;const t=setInterval(()=>{v=Math.min(amt,v+Math.max(1,Math.ceil(amt/20)));$('pn').textContent='+'+v+' 🪙';if(v>=amt)clearInterval(t)},50);
  setTimeout(()=>{$('mg').classList.remove('on');render();checkWin()},2400)}
 function endDay(){
- const g=inc(),c=cost();let m=[],hv=0;
- s.sav*=1.03;s.coins+=g-c;
- if(s.coins<0){s.coins=0;s.star=Math.max(0,s.star-2);m.push('😢 -2⭐')}
- s.p=s.p.map(p=>{if(!p)return p;p.left--;if(p.left>0)return p;const x=S[p.i];if(Math.random()>=x.k){s.coins+=x.r;hv+=x.r;s.h[p.i]++;m.push(x.i+' +'+x.r+'🪙')}else m.push('🥀 '+x.i);return null});
- s.rm=s.rm.filter(r=>{if(--r.left>0)return true;s.l[r.i]=Math.max(0,s.l[r.i]-1);m.push('🗑️ '+L[r.i].i);return false});
- if(Math.random()<.25){if(s.l.some(v=>v)&&Math.random()<.5){s.coins=Math.max(0,s.coins-6);m.push('🔧 -6🪙')}else{s.coins+=8;m.push('🎁 +8🪙')}}
- const sal=s.di,ds=s.ds,dv=s.dv,t=Math.max(1,sal+g+hv);s.di=0;s.ds=0;s.dv=0;s.gd={};s.en=3;s.day++;const pc=v=>sal?Math.round(v/sal*100):0,pt=v=>sal?pc(v)+'%':'—',pe=v=>sal?'+'+pc(v)+'%':'—',rw=(ic,lb,v,p,col)=>`<div class="row"><span>${ic}</span><span class="lb">${lb}</span><div class="bar"><b style="width:${Math.min(100,Math.max(0,p))}%;background:var(--${col})"></b></div><span class="vv">${v}</span></div>`;
- let pool=T(t).map((_,q)=>q).filter(q=>!s.tu.includes(q));if(!pool.length){s.tu=[];pool=T(t).map((_,q)=>q)}
- const q=pool[Math.random()*pool.length|0];s.tu.push(q);const [ic,tx]=T(t)[q];
- $('tipc').innerHTML=`<h1>📅 ${s.day}</h1>${rw('💼','Salario',sal+' 🪙 (100%)',100,'ok')}${rw('🧾','Gastos',c+' 🪙 ('+pt(c)+')',pc(c),'bad')}${rw('🐷','Ahorro',ds+' 🪙 ('+pt(ds)+')',pc(ds),'ok')}${rw('🌱','Inversión',dv+' 🪙 ('+pt(dv)+')',pc(dv),'ok')}${rw('🐔','Activos',g+' 🪙 ('+pe(g)+')',pc(g),'ok')}<div class="row" style="justify-content:center;font-weight:800;font-size:17px">📈 ${sal+g} 🪙 ${sal?'('+(100+pc(g))+'%)':''}</div><div class="step" style="--t:var(--sun);margin:8px 0"><b>${ic}</b>${tx}</div>${s.day===4&&!s.r4?(s.r4=1,'<div class="step" style="--t:var(--mint)"><b>🎯</b>Ahorra primero para luego invertir, comprar activos o comprar cosas que te hagan feliz. Cuando tengas suficientes monedas, compra tu deseo. ¡Compra los 3 deseos para ganar el juego!</div>'):''}${m.length?`<div style="font-size:20px">${m.join('  ')}</div>`:''}<button class="btn go" id="tok">☀️</button>`;
- $('tip').classList.add('on');$('tok').onclick=()=>$('tip').classList.remove('on');
+ const g=inc(),c=cost(),pas=c-B.reduce((t,x)=>t+x.d,0),ev=[];let hv=0,take=0,broke=0;
+ s.sav*=1.03;
+ s.p=s.p.map(p=>{if(!p)return p;p.left--;if(p.left>0)return p;const x=S[p.i];if(Math.random()>=x.k){hv+=x.r;s.h[p.i]++;ev.push(x.i+' +'+x.r+'🪙')}else ev.push('🥀 '+x.i);return null});
+ s.rm=s.rm.filter(r=>{if(--r.left>0)return true;s.l[r.i]=Math.max(0,s.l[r.i]-1);ev.push('🗑️ '+L[r.i].i);return false});
+ s.coins+=g+hv;
+ if(s.coins>=c)s.coins-=c;else{take=Math.min(c-s.coins,Math.floor(s.sav));s.sav-=take;const r=s.coins+take-c;if(r<0){broke=1;s.coins=0}else s.coins=r}
+ if(Math.random()<.25){if(s.l.some(v=>v)&&Math.random()<.5){s.coins=Math.max(0,s.coins-6);ev.push('🔧 -6🪙')}else{s.coins+=8;ev.push('🎁 +8🪙')}}
+ const sal=s.di,gain=sal+g+hv,tp=T(Math.max(1,gain));
+ let pool=tp.map((_,q)=>q).filter(q=>!s.tu.includes(q));if(!pool.length){s.tu=[];pool=tp.map((_,q)=>q)}
+ const q=pool[Math.random()*pool.length|0];s.tu.push(q);
+ const b={d:s.day,sal,g,hv,gain,c,pas,ds:s.ds,dv:s.dv,take,broke,left:Math.floor(s.coins),ev,tip:tp[q],r4:s.day+1===4&&!s.r4};
+ if(b.r4)s.r4=1;
+ s.last=b;s.di=0;s.ds=0;s.dv=0;s.gd={};s.en=3;s.day++;showBal(b,true);
 }
-function checkWin(){if(s.wl.length===3&&s.w.every(v=>v)){$('winstat').textContent='📅 '+s.day+'   ⭐ '+s.star;$('win').classList.add('on')}}
-function picker(){pk=[];$('pkg').innerHTML=WD.map((x,i)=>`<button class="it" data-pk="${i}" data-tip="${x[1]}: ${x[2]} 🪙" style="--t:var(--mint)">${x[0]}<small>${x[2]}</small></button>`).join('');$('pkn').textContent='0/3';$('pkb').disabled=true;$('pk').classList.add('on')}
-$('pkg').onclick=e=>{const b=e.target.closest('[data-pk]');if(!b)return;const i=+b.dataset.pk,at=pk.indexOf(i);if(at>=0){pk.splice(at,1);b.classList.remove('sel')}else if(pk.length<3){pk.push(i);b.classList.add('sel')}$('pkn').textContent=pk.length+'/3';$('pkb').disabled=pk.length<3};
-$('pkb').onclick=()=>{s.wl=pk.slice();s.w=[0,0,0];$('pk').classList.remove('on');save();render()};
-function act(a,i){
+function showBal(b,first){
+ const sad=b.take||b.broke,bs=b.sal||b.gain||1,pc=v=>Math.round(v/bs*100),
+ rw=(ic,lb,v,col)=>`<div class="row"><span>${ic}</span><span class="lb">${lb}</span><div class="bar"><b style="width:${Math.min(100,Math.max(0,pc(v)))}%;background:var(--${col})"></b></div><span class="vv">${v} 🪙 (${pc(v)}%)</span></div>`,rs=[];
+ if(b.take||b.broke)rs.push('Usaste tus ahorros para pagar gastos. ¡Guarda monedas para los gastos!');
+ if(b.gain>0){if(b.d>3&&b.c/b.gain>.5)rs.push('Tus gastos pasan del 50% de lo que ganas ('+Math.floor(b.gain*.5)+' 🪙)');if(b.pas/b.gain>.3)rs.push('Tus pasivos pasan del 30% ('+Math.floor(b.gain*.3)+' 🪙)');if(b.ds<b.gain*.2)rs.push('Ahorra al menos el 20% ('+Math.ceil(b.gain*.2)+' 🪙)')}else rs.push('Hoy no ganaste monedas: ¡trabaja!');
+ $('balc').innerHTML=`<h1>📋 Hoja de Balance · Día ${b.d}</h1><div style="font-size:50px">${sad?'😢':'😊'}</div><div class="bl">💰 Ganaste <b>${b.gain}</b> monedas</div><div class="bl">🧾 Gastaste <b>${b.c}</b> monedas</div><div class="bl">🐷 ${b.ds>=0?'Ahorraste':'Sacaste de tus ahorros'} <b>${Math.abs(b.ds)}</b> monedas</div><div class="bl">👛 Te quedan <b>${b.left}</b> monedas</div>`+
+ (b.take?`<div class="sad">😢 Tuviste que tomar <b>${b.take}</b> monedas de tus ahorros para pagar los gastos del día (${b.c} 🪙).</div>`:'')+(b.broke?'<div class="sad">😢 Ni con tus ahorros alcanzó para todos los gastos.</div>':'')+
+ rw('💼','Salario',b.sal,'ok')+rw('🐔','Activos',b.g,'ok')+(b.hv?rw('🌱','Inversiones',b.hv,'ok'):'')+rw('🧾','Gastos',b.c,'bad')+rw('🐷','Ahorro del día',b.ds,'ok')+
+ `<div class="vd" style="background:var(--${rs.length?'peach':'mint'})">${rs.length?'⚠️ Por ahora no vas por buen camino':'👍 ¡Vas por buen camino!'}${rs.slice(0,2).map(r=>`<div style="font-weight:600;font-size:13px">• ${r}</div>`).join('')}</div>`+
+ `<div class="step" style="--t:var(--sun);margin:8px 0"><b>${b.tip[0]}</b>${b.tip[1]}</div>`+
+ (first&&b.r4?'<div class="step" style="--t:var(--mint)"><b>🎯</b>Ahorra primero para luego invertir, comprar activos o comprar cosas que te hagan feliz. Cuando tengas suficientes monedas, compra tu deseo. ¡Compra todos tus deseos para ganar el juego!</div>':'')+
+ (b.ev.length?`<div style="font-size:20px">${b.ev.join('  ')}</div>`:'')+'<button class="btn go" id="bok">▶️</button>';
+ $('bal').classList.add('on');$('bok').onclick=()=>$('bal').classList.remove('on');
+}
+const WA={};['Cometa|🪁|fly|wob|☁️ 🌬️ 🌤️|drift|sky|¡Vuela alto!','Rompecabezas|🧩|drop|pulse|🧩 ✨ 💡|fall|fun|¡Pieza encajada!','Juegos de mesa|🎲|jump|wob|🃏 ♟️ 🎯|twk|fun|¡Tiro ganador!','Balón profesional|⚽|jump|spin|🥅 👏 ⭐|fall|grass|¡GOOOL!','Oso gigante|🧸|zoom|pulse|💖 🎀 ✨|rise|fun|¡Abrazo gigante!','Audífonos|🎧|shake|pulse|🎵 🎶 🎼|rise|stage|¡Dale play!','Canasta de baloncesto|🏀|jump|spin|🏆 ⭐ 👏|fall|sun|¡Canasta de tres!','Robot armable|🤖|ride|bob|⚙️ 🔩 ⚡|twk|space|¡Beep, estoy vivo!','Cámara|📷|zoom|pulse|🌄 🖼️ ✨|twk|sun|¡Click! Foto perfecta','Violín|🎻|shake|wob|🎵 🎶 🌹|rise|stage|¡Qué melodía!','Piscina inflable|🏊|swim|bob|💦 🫧 ☀️|rise|sea|¡Chapuzón!','Dron|🚁|fly|wob|☁️ 🌄 📡|drift|sky|¡Mira desde arriba!','Piano|🎹|jump|wob|🎵 🎶 ✨|rise|stage|¡Do, re, mi!','Batería|🥁|shake|pulse|🎶 💥 ⭐|twk|stage|¡Ra-ta-tá!','Casa del árbol|🌳|zoom|wob|🍃 🐦 🏠|fall|grass|¡Mi casa secreta!','Paseo en bote|🛶|swim|bob|🌊 🐟 ☀️|drift|sea|¡Reme, reme!','Día en la feria|🎡|spin|pulse|🎈 🍭 🎟️|rise|fun|¡Qué diversión!','Acuario|🐠|swim|wob|🐟 🫧 🐙|rise|sea|¡Blub, blub!','Jardín propio|🪴|zoom|wob|🌸 🦋 🐝|drift|grass|¡Todo floreció!','Fiesta de cumpleaños|🍰|jump|pulse|🎈 🎉 🎁|fall|fun|¡Feliz cumpleaños!','Noche de cine|🎬|zoom|wob|🍿 ⭐ 🎞️|twk|night|¡Luces, cámara, acción!','Excursión al volcán|🌋|zoom|pulse|🔥 💨 🥾|rise|sun|¡Llegamos a la cima!','Safari|🦁|ride|bob|🌴 🦓 🐘|drift|sun|¡Roooar!','Tren eléctrico|🚂|ride|bob|💨 ⚡ 🌳|drift|grass|¡Chu, chu!','Viaje de esquí|🎿|ride|wob|❄️ ⛷️ 🏔️|fall|snow|¡A deslizarse!','Vuelta al mundo|🌎|spin|pulse|✈️ 🗺️ 🧳|drift|sky|¡Conocí el mundo!','Campamento espacial|🚀|fly|wob|⭐ 🌙 🪐|twk|space|¡Despegue!','Torneo deportivo|🏆|zoom|pulse|🥇 👏 🎉|fall|sun|¡Campeón!','Karaoke|🎤|shake|wob|🎵 🎶 ⭐|rise|stage|¡Qué voz!','Laboratorio de ciencias|🧪|shake|pulse|💥 🫧 🔬|rise|fun|¡Eureka!','Paracaídas|🪂|sink|wob|☁️ 🕊️ 🌄|drift|sky|¡Wiiii!','Tabla de surf|🏄|swim|wob|🌊 🐬 ☀️|drift|sea|¡Qué ola!','Buceo|🤿|sink|bob|🫧 🐠 🐙|rise|sea|¡Un mundo bajo el mar!','Dardos|🎯|zoom|pulse|🎯 ⭐ 💥|twk|fun|¡Justo al centro!','Ping pong|🏓|swim|wob|⚪ 👏 ⭐|twk|fun|¡Ping! ¡Pong!','Boliche|🎳|ride|spin|💥 ⭐ 🎳|fall|fun|¡Chuza!','Clases de karate|🥋|jump|pulse|💪 ⭐ 💥|twk|sun|¡Hiyaa!','Clases de música|🎼|float|wob|🎵 🎶 🎸|rise|stage|¡Qué bien suena!','Taller de tejido|🧶|ride|spin|🧵 🧦 🧣|drift|fun|¡Qué suave!','Clase de cocina|🍣|jump|wob|🍳 🔥 👨‍🍳|rise|sun|¡Delicioso!','Bici de montaña|🚵|ride|bob|⛰️ 🌲 💨|drift|grass|¡A toda velocidad!','Trineo|🛷|ride|wob|❄️ ⛄ 🌲|fall|snow|¡Wiii, nieve!','Tienda de campaña|⛺|zoom|pulse|🔥 ⭐ 🌙|twk|night|¡Noche de campamento!','Museo de dinosaurios|🦖|ride|bob|🦴 🌋 🌿|drift|grass|¡Rooaaar!','Nadar con delfines|🐬|swim|wob|🌊 🫧 ☀️|rise|sea|¡Qué simpáticos!','Obra de teatro|🎭|zoom|wob|🌹 👏 ⭐|fall|stage|¡Aplausos!','Viaje a Hawái|🌺|spin|pulse|🌴 🍍 🌊|drift|sea|¡Aloha!','Viaje a París|🗼|zoom|wob|🥐 🎨 💙|twk|night|¡Oh la la!','Entradas al circo|🎪|jump|wob|🎈 🤹 🐘|fall|fun|¡Pasen y vean!','Carrera de karts|🏎️|ride|bob|🏁 💨 🔥|drift|city|¡Vrooom!','Bici|🚲|ride|bob|🌳 ☁️ 🌈|drift|grass|¡A pedalear!','Consola|🎮|zoom|pulse|👾 ⭐ 🍄|fall|night|¡Nivel superado!','Viaje|✈️|fly|wob|☁️ 🏝️ 🌴|drift|sky|¡Nos vamos de viaje!','Guitarra|🎸|shake|wob|🎵 🎶 🔥|rise|stage|¡Rock and roll!','Telescopio|🔭|zoom|wob|⭐ 🌙 🪐|twk|space|¡Cuántas estrellas!','Parque de diversiones|🎢|ride|wob|🎈 🍭 🎡|rise|fun|¡Aaaah, qué rápido!','Patineta|🛹|ride|wob|💨 ⭐ 🌟|drift|city|¡Qué truco!','Libros|📚|float|wob|📖 ✨ 💡|rise|sun|¡A leer aventuras!','Set de arte|🎨|spin|pulse|🖌️ 🌈 ✨|fall|fun|¡Qué obra maestra!','Campamento|🏕️|zoom|pulse|🔥 🌲 ⭐|twk|night|¡Malvaviscos al fuego!'].forEach(r=>{const a=r.split('|');WA[a[0]]=a.slice(1)});
+function wishAnim(id,done){
+ const x=WD[id],a=WA[x[1]]||[x[0],'zoom','pulse','✨ ⭐ 🎉','twk','fun','¡Lo lograste!'],ps=a[3].split(' ');let h='';
+ for(let q=0;q<18;q++){const t=a[4];h+=`<i class="pa ${t}" style="left:${Math.random()*92}%;top:${t==='twk'||t==='drift'?Math.random()*85:0}%;animation-delay:-${Math.random()*3}s;font-size:${20+Math.random()*22}px">${ps[q%ps.length]}</i>`}
+ $('wac').innerHTML=`<div class="scene t-${a[5]}">${h}<div class="ac m-${a[1]}"><span class="in i-${a[2]}">${a[0]}</span></div><div class="cap">${esc(a[6])}</div><div class="cap2">🎉 ${esc(x[1])}</div></div><button class="btn go" id="wok" disabled>▶️</button>`;
+ $('wa').classList.add('on');const b=$('wok');let fin=0;const end=()=>{if(fin)return;fin=1;$('wa').classList.remove('on');if(done)done()};
+ setTimeout(()=>{b.disabled=false},5200);b.onclick=end;setTimeout(end,8000)}
+function checkWin(){if(s.wl.length&&s.w.length===s.wl.length&&s.w.every(v=>v)){$('winstat').textContent='📅 '+s.day+'   ⭐ '+stars();$('win').classList.add('on')}}
+function drawPk(){
+ $('pkm').innerHTML=[[1,'⚡','Rápido'],[3,'🎯','Medio'],[5,'🏔️','Largo']].map(m=>`<button class="btn${need===m[0]?' sel':''}" data-md="${m[0]}" data-tip="Juego ${m[2].toLowerCase()}: ${m[0]} deseo${m[0]>1?'s':''}">${m[1]} ${m[2]} · ${m[0]}</button>`).join('');
+ $('pkg').innerHTML=WD.map((x,i)=>`<button class="it${pk.includes(i)?' sel':''}" data-pk="${i}" data-tip="${x[1]}: ${x[2]} 🪙 y ${SB(x[2])} ⭐" style="--t:var(--mint)">${x[0]}<small>${x[2]}</small></button>`).join('');
+ $('pkn').textContent=pk.length+'/'+need;$('pkb').disabled=pk.length!==need;hideTp()}
+function picker(){pk=[];need=3;drawPk();$('pk').classList.add('on')}
+$('pkm').onclick=e=>{const b=e.target.closest('[data-md]');if(!b)return;need=+b.dataset.md;pk=pk.slice(0,need);drawPk()};
+$('pkg').onclick=e=>{const b=e.target.closest('[data-pk]');if(!b)return;const i=+b.dataset.pk,at=pk.indexOf(i);if(at>=0)pk.splice(at,1);else if(pk.length<need)pk.push(i);drawPk()};
+$('pkb').onclick=()=>{s.wl=pk.slice();s.w=pk.map(()=>0);$('pk').classList.remove('on');save();render()};
+const sv=()=>{try{return JSON.parse(localStorage.getItem(K+'L'))||[]}catch(e){return[]}};
+const mini2=(th,nt)=>`<div class="island mini${nt?' night':''}" style="--s:15px">${land(th.length,nt)}<span class="sun">${nt?'🌙':'☀️'}</span>${th.map(t=>`<span style="left:${+t[1]||0}%;top:${+t[2]||0}%;z-index:${Math.round(+t[2]||0)+5}">${esc(t[0])}</span>`).join('')}</div>`;
+function doSave(){const nm=($('svn').value.trim()||'Mi isla').slice(0,24),th=[...document.querySelectorAll('.island>span[data-id]')].map(e=>[e.textContent,parseFloat(e.style.left)||0,parseFloat(e.style.top)||0]),a=sv().filter(x=>x.n!==nm);a.unshift({n:nm,t:Date.now(),d:s.day,th,nt:dark(),s});try{localStorage.setItem(K+'L',JSON.stringify(a.slice(0,8)));toast('💾 ✅')}catch(e){toast('💾 ❌')}$('svm').classList.remove('on')}
+function openLoad(){const a=sv();$('ldl').innerHTML=a.length?a.map((x,i)=>`<div class="sl">${mini2(x.th||[],x.nt)}<div class="sli"><b>${esc(x.n)}</b><div>📅 ${x.d|0} · ${new Date(x.t).toLocaleDateString()}</div></div><div class="items"><button class="btn go" data-ld="${i}" data-tip="Cargar">▶️</button><button class="btn" data-dl="${i}" data-tip="Borrar">🗑️</button></div></div>`).join(''):'<div style="font-size:48px;margin:16px">📭</div>';$('ldm').classList.add('on')}
+$('ldl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const a=sv();if(b.dataset.ld!=null){const x=a[+b.dataset.ld];if(x&&x.s&&x.s.v===4){s=x.s;save();render();$('ldm').classList.remove('on');toast('📂 ✅')}}else if(b.dataset.dl!=null){a.splice(+b.dataset.dl,1);try{localStorage.setItem(K+'L',JSON.stringify(a))}catch(e){}openLoad()}};
+function act(a,i,b){
  if(a==='job')return mini(i);
- if(a==='dep'){if(s.coins<10)return;s.coins-=10;s.sav+=10;s.ds+=10;s.gd.dep=1;toast('🐷 +10')}
+ if(a==='pg'){const k=b.dataset.k,len=k==='g'?L.filter((_,q)=>s.l[q]>0).length:{j:J,s:S,a:A,l:L}[k].length,sz=k==='g'?5:10,n=Math.max(1,Math.ceil(len/sz));s.pg[k]=(Math.min(n-1,s.pg[k]|0)+ +b.dataset.d+n)%n}
+ else if(a==='dep'){if(s.coins<10)return;s.coins-=10;s.sav+=10;s.ds+=10;s.gd.dep=1;toast('🐷 +10')}
  else if(a==='wd'){if(s.sav<10)return;s.sav-=10;s.coins+=10;s.ds-=10;toast('🪙 +10')}
- else if(a==='seed'){const x=S[i],k=s.p.findIndex(p=>!p);if(k<0)return toast('🌱 ❌');if(s.coins<x.c)return;s.coins-=x.c;s.dv+=x.c;s.gd.seed=1;s.p[k]={i,left:x.t};toast(x.i+' 🌱')}
+ else if(a==='seed'){const x=S[i],k=s.p.findIndex(p=>!p);if(k<0)return toast('🌱 5/5');if(s.coins<x.c)return;s.coins-=x.c;s.dv+=x.c;s.gd.seed=1;s.p[k]={i,left:x.t};toast(x.i+' ➕')}
  else if(a==='a'){const x=A[i];if(s.coins<x.c)return;s.coins-=x.c;s.a[i]++;s.gd.a=1;toast(x.i+' +'+x.d+'🪙/📅')}
- else if(a==='l'){const x=L[i];if(s.coins<x.c)return;s.coins-=x.c;s.l[i]++;s.star+=x.s;toast(x.i+' +'+x.s+'⭐  -'+x.d+'🪙/📅')}
+ else if(a==='l'){const x=L[i];if(s.coins<x.c)return;s.coins-=x.c;s.l[i]++;toast(x.i+' +'+SB(x.c)+'⭐  -'+x.d+'🪙/📅')}
  else if(a==='rm'){s.rm.push({i,left:rmDays(i)});toast('🗑️ '+rmDays(i)+'📅')}
- else if(a==='w'){const x=WD[s.wl[i]];if(s.w[i]||s.coins<x[2])return;s.coins-=x[2];s.w[i]=1;s.star+=10;toast(x[0]+' 🎉 +10⭐')}
+ else if(a==='w'){const x=WD[s.wl[i]],r=SB(x[2]);if(s.w[i])return wishAnim(s.wl[i]);if(stars()<r)return toast('🔒 '+r+'⭐');if(s.coins<x[2])return;s.coins-=x[2];s.w[i]=1;save();render();return wishAnim(s.wl[i],checkWin);toast(x[0]+' 🎉')}
  else if(a==='next')endDay();
+ else if(a==='bal'){if(s.last)showBal(s.last,false);else toast('📋 …');return}
  else if(a==='help'){$('intro').classList.add('on');return}
+ else if(a==='night'){s.night=!dark()}
  else if(a==='save'){$('svn').value='';$('svm').classList.add('on');setTimeout(()=>$('svn').focus(),50);return}
  else if(a==='load'){openLoad();return}
  else if(a==='fs'){try{(document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()).catch(()=>toast('⛶ ❌'))}catch(e){toast('⛶ ❌')}return}
  else if(a==='reset'){$('cf').classList.add('on');return}
  save();render();checkWin()
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.classList.contains('off'))act(b.dataset.a,+b.dataset.i)});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.classList.contains('off'))act(b.dataset.a,+b.dataset.i,b)});
+const hideTp=()=>{$('tp').style.display='none';tel=null};
+document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(el===tel)return;tel=el;const t=$('tp');if(!el){t.style.display='none';return}t.textContent=el.dataset.tip;t.style.display='block';const r=el.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;t.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';let y=r.top-h-8;if(y<8)y=r.bottom+8;t.style.top=Math.min(y,innerHeight-h-8)+'px'});
+document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')hideTp()});
 $('mx').onclick=()=>$('mg').classList.remove('on');
-$('cy').onclick=()=>{$('cf').classList.remove('on');s=fresh();s.seen=1;save();render();picker()};
+$('cy').onclick=()=>{$('cf').classList.remove('on');s=fresh();save();render();$('intro').classList.add('on')};
 $('cn').onclick=()=>$('cf').classList.remove('on');
-$('app').addEventListener('pointerdown',e=>{const el=e.target.closest('.island>span[data-id]');if(!el)return;const isl=el.parentNode;el.setPointerCapture(e.pointerId);el.style.zIndex=99;const mv=ev=>{const r=isl.getBoundingClientRect(),l=Math.max(0,Math.min(92,(ev.clientX-r.left)/r.width*100-3)),t=Math.max(0,Math.min(85,(ev.clientY-r.top)/r.height*100-6));el.style.left=l+'%';el.style.top=t+'%';el._p=[l,t]},up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);if(el._p){s.pos[el.dataset.id]=el._p;save()}};el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up)});
-function guide(){const h=$('hand'),d=s.day,g=s.gd||{};let q=null,ix=0;if(d<=3){if(!g.job){q='job';if(d===3){if(g.rj==null)g.rj=Math.random()*J.length|0;ix=g.rj}}else if(d===3)q=g.a?'next':s.coins>=A[0].c?'a':s.sav>=10?'wd':'next';else q=!g.dep?'dep':(d===2&&!g.seed)?'seed':'next'}const o=document.querySelector('.hint');if(o)o.classList.remove('hint');const el=q&&!document.querySelector('.ov.on')&&document.querySelector(q==='next'?'[data-a="next"]':`[data-a="${q}"][data-i="${ix}"]`);if(!el){h.style.display='none';return}el.classList.add('hint');const r=el.getBoundingClientRect();h.style.display='block';h.style.left=(r.left+r.width/2)+'px';h.style.top=(r.bottom-6)+'px'}
-{const _r=render;render=()=>{_r();fit();guide()}}
-function fit(){document.querySelectorAll('#app .panel[data-fit]').forEach(p=>{const ok=()=>p.lastElementChild.getBoundingClientRect().bottom<=p.getBoundingClientRect().bottom-6;let lo=24,hi=100;while(hi-lo>2){const m=(lo+hi)>>1;p.style.setProperty('--s',m+'px');if(ok())lo=m;else hi=m}p.style.setProperty('--s',lo+'px')})}
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const sv=()=>{try{return JSON.parse(localStorage.getItem(K+'L'))||[]}catch(e){return[]}};
-const mini2=th=>`<div class="island mini" style="--s:15px"><span class="sun">☀️</span><div class="gnd"></div>${BG.filter(b=>th.length>=b[0]).map(b=>b[1]).join('')}${th.map(t=>`<span style="left:${+t[1]||0}%;top:${+t[2]||0}%;z-index:${Math.round(+t[2]||0)+5}">${esc(t[0])}</span>`).join('')}</div>`;
-function doSave(){const nm=($('svn').value.trim()||'Mi isla').slice(0,24),th=[...document.querySelectorAll('.island>span[data-id]')].map(e=>[e.textContent,parseFloat(e.style.left)||0,parseFloat(e.style.top)||0]),sl=sv().filter(x=>x.n!==nm);sl.unshift({n:nm,t:Date.now(),d:s.day,th,s});try{localStorage.setItem(K+'L',JSON.stringify(sl.slice(0,8)));toast('💾 ✅')}catch(e){toast('💾 ❌')}$('svm').classList.remove('on')}
-function openLoad(){const a=sv();$('ldl').innerHTML=a.length?a.map((x,i)=>`<div class="sl">${mini2(x.th||[])}<div class="sli"><b>${esc(x.n)}</b><div>📅 ${x.d|0} · ${new Date(x.t).toLocaleDateString()}</div></div><div class="items"><button class="btn go" data-ld="${i}" data-tip="Cargar">▶️</button><button class="btn" data-dl="${i}" data-tip="Borrar">🗑️</button></div></div>`).join(''):'<div style="font-size:48px;margin:16px">📭</div>';$('ldm').classList.add('on')}
-$('ldl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const a=sv();if(b.dataset.ld!=null){const x=a[+b.dataset.ld];if(x&&x.s&&x.s.v===3){s=x.s;save();render();$('ldm').classList.remove('on');toast('📂 ✅')}}else if(b.dataset.dl!=null){a.splice(+b.dataset.dl,1);try{localStorage.setItem(K+'L',JSON.stringify(a))}catch(e){}openLoad()}};
 $('svy').onclick=doSave;$('svx').onclick=()=>$('svm').classList.remove('on');$('svn').onkeydown=e=>{if(e.key==='Enter')doSave()};$('ldx').onclick=()=>$('ldm').classList.remove('on');
+$('play').onclick=()=>{$('intro').classList.remove('on');s.seen=1;save();if(!s.wl.length)picker()};
+$('again').onclick=()=>{$('win').classList.remove('on');s=fresh();save();render();$('intro').classList.add('on')};
+$('app').addEventListener('pointerdown',e=>{const el=e.target.closest('.island>span[data-id]');if(!el)return;const isl=el.parentNode;el.setPointerCapture(e.pointerId);el.style.zIndex=99;hideTp();const mv=ev=>{const r=isl.getBoundingClientRect(),l=Math.max(0,Math.min(92,(ev.clientX-r.left)/r.width*100-3)),t=Math.max(0,Math.min(85,(ev.clientY-r.top)/r.height*100-6));el.style.left=l+'%';el.style.top=t+'%';el._p=[l,t]},up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);if(el._p){s.pos[el.dataset.id]=el._p;save()}};el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up)});
+{const _r=render;render=()=>{document.documentElement.dataset.theme=dark()?'dark':'light';hideTp();_r();fit();guide()}}
 window.addEventListener('resize',()=>{fit();guide()});if(document.fonts)document.fonts.ready.then(()=>{fit();guide()});
 setInterval(guide,400);
-$('play').onclick=()=>{$('intro').classList.remove('on');s.seen=1;save();if(s.wl.length<3)picker()};
-$('again').onclick=()=>{$('win').classList.remove('on');s=fresh();s.seen=1;save();render();picker()};
-render();if(!s.seen)$('intro').classList.add('on');else if(s.wl.length<3)picker();
+render();if(!s.seen)$('intro').classList.add('on');else if(!s.wl.length)picker();
 </script></body></html>
